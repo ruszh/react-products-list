@@ -1,36 +1,30 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
+import './List.css';
 
-export class List extends Component {
-
-  render() {
-    const { items, selectHandler } = this.props;
-
-    return (
+const List = (props) => (
       <div>
         <ul className='list-group'>
-          {    items.map(el => (
-                  <li className='list-group-item' key={el.id}>
+          { props.items.map(el => (
+                  <li
+                      className={el.active ? 'list-group-item' : 'list-group-item not-active'}
+                      key={el.id}>
                   <input
                       type='checkbox'
                       className='checkbox'
                       style={{ marginRight: '10px' }}
                       checked={ el.selected }
                       value={el.id}
-                      onChange={selectHandler}/>
+                      onChange={props.selectHandler}/>
                   {el.name}
                   </li>
-                ))
-            }
+                ))}
         </ul>
       </div>
-    )
-  }
-}
+    );
 
 List.propTypes = {
   items: PropTypes.array.isRequired
 }
-
 
 export default List;

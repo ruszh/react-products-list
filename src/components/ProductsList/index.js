@@ -1,22 +1,21 @@
-import React, { Component } from 'react';
+import React from 'react';
 import List from '../List';
-import Search from '../Search';
+import Search from '../../containers/Search';
 import PropTypes from 'prop-types';
 
-export default class ProductsList extends Component {
-  render() {
-    const { products, selectHandler } = this.props;
-    return (
+const ProductsList = (props) => (
       <div className='col'>
         <h2>Products list</h2>
-        <Search items={products}/>
-        <List items={products} selectHandler={selectHandler}/>
+        <Search items={props.allProducts}/>
+        <List items={props.filteredProducts} selectHandler={props.selectHandler}/>
       </div>
-    )
-  }
-}
+);
 
 ProductsList.proptypes = {
-  products: PropTypes.array.isRequired,
-  selectHandler: PropTypes.func
+  filteredProducts: PropTypes.array.isRequired,
+  allProducts: PropTypes.array.isRequired,
+  selectHandler: PropTypes.func.isRequired
 }
+
+
+export default ProductsList;

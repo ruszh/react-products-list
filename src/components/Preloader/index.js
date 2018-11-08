@@ -1,9 +1,7 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 
-export default class Preloader extends Component {
-  render() {
-    return (
+const Preloader = () => (
       <div style={{ textAlign: 'center', width: '100%'}}>
         <img
           style={{
@@ -13,6 +11,6 @@ export default class Preloader extends Component {
           alt="preloader"
         />
       </div>
-    )
-  }
-}
+);
+
+export default Preloader;
