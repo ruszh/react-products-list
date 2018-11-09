@@ -14,7 +14,7 @@ const List = (props) => (
                       className='checkbox'
                       style={{ marginRight: '10px' }}
                       checked={ el.selected }
-                      value={el.id}
+                      value={ el.id }
                       onChange={props.selectHandler}/>
                   {el.name}
                   </li>

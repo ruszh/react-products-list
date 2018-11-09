@@ -3,23 +3,41 @@ import UserLists from '../UserLists';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getData } from '../../actions/DataActions';
-import { selectProduct } from '../../actions/ProductsListActions';
-import { selectShop } from '../../actions/ShopsListActions';
+import { selectProduct, checkUncheckAllProducts } from '../../actions/ProductsListActions';
+import { selectShop, checkUncheckAllShops } from '../../actions/ShopsListActions';
+import Authentication from '../Authentification';
 
 //import './App.css';
 
 class App extends Component {
+  state = {
+    userIsLigin: false
+  }
 
   render() {
-    const { getDataAction, selectProductAction, selectShopAction, data } = this.props;
+    const {
+      getDataAction,
+      selectProductAction,
+      selectShopAction,
+      checkShopsAction,
+      checkProductsAction,
+      data } = this.props;
     return (
       <div className="App container">
-        <UserLists
-            selectProduct={selectProductAction}
-            selectShop={selectShopAction}
-            getData={getDataAction}
-            lists={data.lists}
-            isLoading={data.isLoading}/>
+      { this.state.userIsLigin ?
+            <UserLists
+                selectProduct={selectProductAction}
+                selectShop={selectShopAction}
+                getData={getDataAction}
+                lists={data.lists}
+                isLoading={data.isLoading}
+                checkShops={checkShopsAction}
+                checkProducts={checkProductsAction}/>
+                :
+            <Authentication />
+      }
+
+
       </div>
     );
   }
@@ -34,7 +52,9 @@ const mapDispatchToProps = dispatch => {
   return {
     getDataAction: () => dispatch(getData()),
     selectProductAction: (id) => dispatch(selectProduct(id)),
-    selectShopAction: (id) => dispatch(selectShop(id))
+    selectShopAction: (id) => dispatch(selectShop(id)),
+    checkShopsAction: (value) => dispatch(checkUncheckAllShops(value)),
+    checkProductsAction: (value) => dispatch(checkUncheckAllProducts(value))
   }
 }
 

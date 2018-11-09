@@ -6,14 +6,56 @@ import Preloader from '../../components/Preloader';
 import { sortByName, sortByCheck } from '../../utilities';
 
 export default class UserLists extends Component {
+
   componentWillMount = () => {
     this.props.getData();
   }
+
   shopSelectHandler = (e) => {
+    console.log(e.target.value)
     this.props.selectShop(e.target.value)
   }
+
   productSelectHandler = (e) => {
+    console.log(e.target.value)
     this.props.selectProduct(e.target.value)
+  }
+
+  get selectedItems() {
+    const allItems = this.props.lists;
+    const getFilteredResult = arr => arr.filter(el => el.selected).map(el => el.id)
+    return {
+      shops: getFilteredResult(allItems.shops),
+      products: getFilteredResult(allItems.products)
+    };
+  }
+
+  checkShopsHandler = () => {
+    const switchCheckedStatus = () => {
+      return this.props.lists.shops.every(el => el.selected) ? "uncheck" : "check"
+    }
+    this.props.checkShops(switchCheckedStatus())
+  }
+
+  checkProductsHandler = () => {
+    const selectedShops = this.selectedItems.shops;
+
+    if(selectedShops.length) {
+      const productsByShops = this.productsStatusForSelectedShops;
+      const allProductsByShops = [...productsByShops.selectedProducts, ...productsByShops.notSelectedProducts]
+      const switchCheckedStatus = () => allProductsByShops.every(el => el.selected) ? "uncheck" : "check"
+
+      return this.props.checkProducts({
+        option: switchCheckedStatus(),
+        arr: allProductsByShops.map(el => el.id)
+      });
+
+    }
+
+    const allProducts = this.props.lists.products;
+    const switchCheckedStatus = () => allProducts.every(el => el.selected) ? 'uncheck-all' : 'check-all';
+
+    this.props.checkProducts({ option: switchCheckedStatus() })
   }
 
   get productsStatusForSelectedShops() {
@@ -85,7 +127,8 @@ export default class UserLists extends Component {
     if(selectedProductsIds.length) {
       return shops.map(shop => {
         const currentShop = { ...shop }
-        const currentShopContainsSelectedProducts = selectedProductsIds.every(prod => shop.productsids.indexOf(prod) !== -1)
+        const currentShopContainsSelectedProducts = selectedProductsIds.every(prod => shop.productsids.indexOf(prod) !== -1);
+
         if(currentShopContainsSelectedProducts) {
           currentShop.active = true;
         } else {
@@ -103,8 +146,15 @@ export default class UserLists extends Component {
       <Fragment>
           {   !isLoading ?
               <div className='row'>
-                  <ShopsList shops={this.filteredShops} selectHandler={this.shopSelectHandler}/>
-                  <ProductsList filteredProducts={this.filteredProducts} allProducts={this.props.lists.products} selectHandler={this.productSelectHandler}/>
+                  <ShopsList
+                      shops={this.filteredShops}
+                      selectHandler={this.shopSelectHandler}
+                      checkShopsHandler={this.checkShopsHandler}/>
+                  <ProductsList
+                      filteredProducts={this.filteredProducts}
+                      allProducts={this.props.lists.products}
+                      selectHandler={this.productSelectHandler}
+                      checkProductsHandler={this.checkProductsHandler} />
               </div>
               : <Preloader />
           }
@@ -115,8 +165,10 @@ export default class UserLists extends Component {
 
 UserLists.propTypes = {
   getData: PropTypes.func.isRequired,
-  data: PropTypes.object.isRequired,
+  data: PropTypes.object,
   isLoading: PropTypes.bool.isRequired,
   selectShop: PropTypes.func.isRequired,
-  selectProduct: PropTypes.func.isRequired
+  selectProduct: PropTypes.func.isRequired,
+  checkShops: PropTypes.func.isRequired,
+  checkProducts: PropTypes.func.isRequired
 }
