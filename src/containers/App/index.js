@@ -11,7 +11,7 @@ import Authentication from '../Authentification';
 
 class App extends Component {
   state = {
-    userIsLigin: false
+    userIsLogin: true 
   }
 
   render() {
@@ -24,7 +24,7 @@ class App extends Component {
       data } = this.props;
     return (
       <div className="App container">
-      { this.state.userIsLigin ?
+      { this.state.userIsLogin ?
             <UserLists
                 selectProduct={selectProductAction}
                 selectShop={selectShopAction}

@@ -9,10 +9,9 @@ export default class Search extends Component {
     super(props);
     this.state = {
       showSearchResult: false,
-      searchResult: []
-    };
-    this.inputElement = React.createRef();
-    this.onSearchHandler = debounce(this.onSearchHandler, 1000, { leading: false, trailing: true });
+      searchResult: [],
+      inputValue: ''
+    };   
   }
 
 
@@ -23,29 +22,31 @@ export default class Search extends Component {
         searchResult: []
       });
     }, 200);
-    this.inputElement.current.value = '';
+    this.setState({ inputValue: ''})
   }
+
   search = (query) => {
+    if(!query) return;
     const itemsArr = this.props.items;
     const searchResult = itemsArr.filter(el => el.name.toLowerCase().indexOf(query) !== -1);
 
     if(searchResult.length) {
       this.setState({
         showSearchResult: true,
-        searchResult,
-        query: ''
+        searchResult
       })
-    } else {
-      this.hideSearchResult();
     }
   }
 
-  onSearchHandler = () => {
-    const value = this.inputElement.current.value;
-    if(!value) return;
+  onSearchHandler = debounce((value) => {
+    this.setState({
+        inputValue: value
+    });
+    //const value = e.target.value;
+    //if(!value) return;
     const query = value.toLowerCase();
     this.search(query);
-  }
+  }, 1000, { leading: false, trailing: true });
 
   render() {
     return (
@@ -54,8 +55,11 @@ export default class Search extends Component {
               type='text'
               className='form-control search-input'
               placeholder='Search'
-              onInput={this.onSearchHandler}
-              ref={this.inputElement}
+              onInput={(e) => {
+                this.setState({inputValue: e.target.value})
+                this.onSearchHandler(e.target.value)
+              }}
+              value={this.state.inputValue}
               onBlur={this.hideSearchResult} />
           { this.state.showSearchResult &&
               <SearchResult

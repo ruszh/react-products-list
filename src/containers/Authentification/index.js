@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import Proptypes from 'prop-types';
+//import PropTypes from 'prop-types';
 import LoginForm from '../../components/LoginForm';
 
 import './Authentification.css';
