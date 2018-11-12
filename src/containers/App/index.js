@@ -1,17 +1,21 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import UserLists from '../UserLists';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getData } from '../../actions/DataActions';
 import { selectProduct, checkUncheckAllProducts } from '../../actions/ProductsListActions';
 import { selectShop, checkUncheckAllShops } from '../../actions/ShopsListActions';
+import { signin, verify, logout } from '../../actions/AuthActions';
 import Authentication from '../Authentification';
+import Header from '../../components/Header';
+//import AuthService from '../../services/AuthService';
 
 //import './App.css';
 
 class App extends Component {
-  state = {
-    userIsLogin: true 
+
+  async componentWillMount() {
+    this.props.verifyAction();
   }
 
   render() {
@@ -21,20 +25,29 @@ class App extends Component {
       selectShopAction,
       checkShopsAction,
       checkProductsAction,
-      data } = this.props;
+      signinAction,
+      logoutAction,
+      auth,
+      data
+    } = this.props;
     return (
       <div className="App container">
-      { this.state.userIsLogin ?
-            <UserLists
-                selectProduct={selectProductAction}
-                selectShop={selectShopAction}
-                getData={getDataAction}
-                lists={data.lists}
-                isLoading={data.isLoading}
-                checkShops={checkShopsAction}
-                checkProducts={checkProductsAction}/>
+      { this.props.auth.login ?
+            <Fragment>
+              <Header email={auth.user.email} logout={logoutAction}/>
+              <UserLists
+                  selectProduct={selectProductAction}
+                  selectShop={selectShopAction}
+                  getData={getDataAction}
+                  lists={data.lists}
+                  isLoading={data.isLoading}
+                  checkShops={checkShopsAction}
+                  checkProducts={checkProductsAction}/>
+            </Fragment>
                 :
-            <Authentication />
+            <Authentication
+                signin={signinAction}
+                error={auth.error}/>
       }
 
 
@@ -45,7 +58,8 @@ class App extends Component {
 
 const mapStateToProps = (store) => {
   return {
-    data: store.data
+    data: store.data,
+    auth: store.auth
   }
 }
 const mapDispatchToProps = dispatch => {
@@ -54,7 +68,10 @@ const mapDispatchToProps = dispatch => {
     selectProductAction: (id) => dispatch(selectProduct(id)),
     selectShopAction: (id) => dispatch(selectShop(id)),
     checkShopsAction: (value) => dispatch(checkUncheckAllShops(value)),
-    checkProductsAction: (value) => dispatch(checkUncheckAllProducts(value))
+    checkProductsAction: (value) => dispatch(checkUncheckAllProducts(value)),
+    signinAction: (user) => dispatch(signin(user)),
+    verifyAction: () => dispatch(verify()),
+    logoutAction: () => dispatch(logout())
   }
 }
 

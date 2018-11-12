@@ -5,30 +5,46 @@ import './LoginForm.css';
 
 const LoginForm = (props) => (
     <div className='form-container'>
-        <form className='login-form' onSubmit={props.submitHandler}>
+        <form className='login-form' onSubmit={ props.signup ? props.signupHandler : props.submitHandler }>
             <div className="inputs-wrapper">
                 <div className="form-group row">
-                    <label htmlFor="login-input" className="col-sm-3 col-form-label">Email:</label>
-                <div className="col">
-                    <input type="text" className="form-control" value='test' id="login-input" placeholder="Email" required />
-                    <div className="invalid-feedback">
-                            Enter correct email
+                    {/* <label htmlFor="login-input" className="col-sm-3 col-form-label">Email:</label> */}
+                    <div className="col">
+                        <input type="text" className={ props.isValid ? "form-control" : "form-control is-invalid"} name='email' id="login-input" placeholder="Email" required />
+                        <div className="invalid-feedback">
+                                Enter correct email
+                        </div>
                     </div>
                 </div>
-            </div>
+                {   props.signup &&
                 <div className="form-group row">
-                    <label htmlFor="password-input" className="col-sm-3 col-form-label">Password:</label>
                     <div className="col">
-                        <input type="password" className="form-control" value='test' id="password-input" placeholder="Password" required />
+                        <input type="text" className="form-control" name='name' id="login-input" placeholder="Name" required/>
+                    </div>
+                </div>
+                }
+                <div className="form-group row">
+                    {/* <label htmlFor="password-input" className="col-sm-3 col-form-label">Password:</label> */}
+                    <div className="col">
+                        <input type="password" className={ props.isValid ? "form-control" : "form-control is-invalid"} name="password" id="password-input" placeholder="Password" required />
                         <div className="invalid-feedback">
                             Enter correct password
                         </div>
                     </div>
                 </div>
                 <div className="form-group row">
-                    <div className="col">
-                        <button type="submit" className="btn btn-primary">Login</button>
-                    </div>
+                    {  props.signup ?
+                        <div className="col">
+                            <button type='submit' className="btn btn-success">Submit</button>
+                            <button onClick={props.signupToggle} className="btn btn-danger">Cancel</button>
+                        </div>
+                        :
+                        <div className="col">
+                            <button onClick={props.signupToggle} className="btn btn-light">Signup</button>
+                            <button type="submit" className="btn btn-primary">Login</button>
+                        </div>
+                    }
+
                 </div>
             </div>
         </form>
@@ -36,7 +52,10 @@ const LoginForm = (props) => (
 );
 
 LoginForm.propTypes = {
-    submitHandler: PropTypes.func.isRequired
+    submitHandler: PropTypes.func.isRequired,
+    signupHandler: PropTypes.func.isRequired,
+    signup: PropTypes.bool.isRequired,
+    isValid: PropTypes.bool.isRequired,
 }
 
 export default LoginForm;
