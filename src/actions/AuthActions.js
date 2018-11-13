@@ -7,6 +7,9 @@ export const VERIFICATION_SUCCESS = 'VERIFICATION_SUCCESS';
 export const VERIFICATION_ERROR = 'VERIFICATION_ERROR';
 export const LOGOUT = 'LOGOUT';
 
+export const SIGNUP_SUCCESS = 'SIGNUP_SUCCESS';
+export const SIGNUP_ERROR = 'SIGNUP_ERROR';
+
 
 export function signin(user) {
     return async dispatch => {
@@ -45,6 +48,23 @@ export function verify() {
             type: VERIFICATION_SUCCESS,
             payload: response.user
         })
+    }
+}
+
+export function signup(user) {
+    return async dispatch => {
+        const result = await AuthService.signup(user);
+
+        if(result.success) {
+            return dispatch({
+                type: SIGNUP_SUCCESS,
+                payload: result.success
+            });
+        }
+        return dispatch({
+            type: SIGNUP_ERROR,
+            payload: result.error
+        });
     }
 }
 

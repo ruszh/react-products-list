@@ -1,38 +1,41 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import LoginForm from '../../components/LoginForm';
-import AuthService from '../../services/AuthService';
+import AuthForm from '../../components/AuthForm';
+import { connect } from 'react-redux';
+//import AuthService from '../../services/AuthService';
 import Alert from '../../components/Alert';
 
 import './Authentification.css';
 
-export default class Authentification extends Component {
+class Authentification extends Component {
     state = {
-        signupMode: false,
-        errorMessage: '',
-        message: ''
+        signupMode: false
     }
 
-    showAlert = (type, message) => {
-        if(type === 'error') {
-            this.setState({
-                errorMessage: message
-            });
-            setTimeout(() => {
-                this.setState({
-                    errorMessage: ''
-                })
-            }, 3000);
-            return;
-        }
-        this.setState({
-            message: message
-        });
-        setTimeout(() => {
-            this.setState({
-                message: ''
-            })
-        }, 3000);
+    // showAlert = (type, message) => {
+    //     if(type === 'error') {
+    //         this.setState({
+    //             errorMessage: message
+    //         });
+    //         setTimeout(() => {
+    //             this.setState({
+    //                 errorMessage: ''
+    //             })
+    //         }, 3000);
+    //         return;
+    //     }
+    //     this.setState({
+    //         message: message
+    //     });
+    //     setTimeout(() => {
+    //         this.setState({
+    //             message: ''
+    //         })
+    //     }, 3000);
+    // }
+
+    componentDidUpdate = () => {
+        console.log('component did update')
     }
 
     onSignupHandler = async (e) => {
@@ -44,13 +47,7 @@ export default class Authentification extends Component {
             password: form.elements['password'].value
         }
 
-        const result = await AuthService.signup(user);
-        if(result.success) {
-            this.signupToggleHandler();
-            return this.showAlert('success', result.success);
-        }
-        this.showAlert('error', result.error);
-        console.log(result)
+        this.props.signup(user);
     }
 
     signupToggleHandler = () => {
@@ -58,7 +55,6 @@ export default class Authentification extends Component {
             signupMode: !this.state.signupMode
         })
     }
-
 
     onSubmitHandler = (e) => {
         e.preventDefault();
@@ -71,11 +67,10 @@ export default class Authentification extends Component {
     }
 
     render() {
-        const { error } = this.props;
-        const { message, errorMessage } = this.state;
+        const { error, message } = this.props;
         return (
         <Fragment>
-            <LoginForm
+            <AuthForm
                 submitHandler={this.onSubmitHandler}
                 isValid={ error ? false : true }
                 signupHandler={this.onSignupHandler}
@@ -83,7 +78,7 @@ export default class Authentification extends Component {
                 signup={this.state.signupMode}
                 />
             { message && <Alert type='success' message={message} /> }
-            { errorMessage &&  <Alert type='danger' message={errorMessage} />}
+            { error &&  <Alert type='danger' message={error} />}
         </Fragment>
         )
     }
@@ -91,5 +86,21 @@ export default class Authentification extends Component {
 
 Authentification.propTypes = {
     signin: PropTypes.func.isRequired,
-    error: PropTypes.string
+    error: PropTypes.string,
+    message: PropTypes.string,
+    signup: PropTypes.func.isRequired
 }
+
+const mapStateToProps = (state) => {
+    return {
+
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Authentification);

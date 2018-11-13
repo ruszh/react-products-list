@@ -4,6 +4,7 @@ import ShopsList from '../../components/ShopsList';
 import PropTypes from 'prop-types';
 import Preloader from '../../components/Preloader';
 import { sortByName, sortByCheck } from '../../utilities';
+import SavedLists from '../../components/SavedLists';
 
 export default class UserLists extends Component {
 
@@ -145,7 +146,8 @@ export default class UserLists extends Component {
     return (
       <Fragment>
           {   !isLoading ?
-              <div className='row'>
+              <Fragment>
+                <div className='row'>
                   <ShopsList
                       shops={this.filteredShops}
                       selectHandler={this.shopSelectHandler}
@@ -154,8 +156,15 @@ export default class UserLists extends Component {
                       filteredProducts={this.filteredProducts}
                       allProducts={this.props.lists.products}
                       selectHandler={this.productSelectHandler}
-                      checkProductsHandler={this.checkProductsHandler} />
-              </div>
+                      checkProductsHandler={this.checkProductsHandler}/>
+                </div>
+                  <SavedLists
+                      userId={this.props.userId}
+                      getSelectedItems={this.selectedItems}
+                      saveList={this.props.saveList}
+                      loadList={this.props.loadList}
+                      listsArr={this.props.listsArr}/>
+              </Fragment>
               : <Preloader />
           }
       </Fragment>
@@ -170,5 +179,7 @@ UserLists.propTypes = {
   selectShop: PropTypes.func.isRequired,
   selectProduct: PropTypes.func.isRequired,
   checkShops: PropTypes.func.isRequired,
-  checkProducts: PropTypes.func.isRequired
+  checkProducts: PropTypes.func.isRequired,
+  userId : PropTypes.string.isRequired,
+  saveList: PropTypes.func.isRequired
 }

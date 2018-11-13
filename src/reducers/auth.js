@@ -3,13 +3,16 @@ import {
     AUTH_ERROR,
     VERIFICATION_SUCCESS,
     VERIFICATION_ERROR,
-    LOGOUT
+    LOGOUT,
+    SIGNUP_SUCCESS,
+    SIGNUP_ERROR
  } from '../actions/AuthActions';
 
 const initState = {
     user: {},
     login: false,
-    error: ''
+    error: '',
+    message: ''
 }
 
 export function authReducer(state = initState, action) {
@@ -48,6 +51,18 @@ export function authReducer(state = initState, action) {
                 error: '',
                 user: {},
                 login: false
+            }
+        case SIGNUP_SUCCESS:
+            return {
+                ...state,
+                error: '',
+                message: action.payload
+            }
+        case SIGNUP_ERROR:
+            return {
+                ...state,
+                message: '',
+                error: action.payload
             }
         default:
             return state;
