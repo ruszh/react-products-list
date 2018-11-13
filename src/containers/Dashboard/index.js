@@ -3,23 +3,28 @@ import ProductsList from '../../components/ProductsList';
 import ShopsList from '../../components/ShopsList';
 import PropTypes from 'prop-types';
 import Preloader from '../../components/Preloader';
+import { connect } from 'react-redux';
 import { sortByName, sortByCheck } from '../../utilities';
 import SavedLists from '../../components/SavedLists';
+import { getData } from '../../actions/DataActions';
+import { selectProduct, checkUncheckAllProducts } from '../../actions/ProductsListActions';
+import { selectShop, checkUncheckAllShops } from '../../actions/ShopsListActions';
+import { saveList, loadLists } from '../../actions/SavedListActions';
 
-export default class UserLists extends Component {
+class Dashboard extends Component {
 
   componentWillMount = () => {
-    this.props.getData();
+    this.props.getDataAction();
   }
 
   shopSelectHandler = (e) => {
     console.log(e.target.value)
-    this.props.selectShop(e.target.value)
+    this.props.selectShopAction(e.target.value)
   }
 
   productSelectHandler = (e) => {
     console.log(e.target.value)
-    this.props.selectProduct(e.target.value)
+    this.props.selectProductAction(e.target.value)
   }
 
   get selectedItems() {
@@ -46,7 +51,7 @@ export default class UserLists extends Component {
       const allProductsByShops = [...productsByShops.selectedProducts, ...productsByShops.notSelectedProducts]
       const switchCheckedStatus = () => allProductsByShops.every(el => el.selected) ? "uncheck" : "check"
 
-      return this.props.checkProducts({
+      return this.props.checkProductsAction({
         option: switchCheckedStatus(),
         arr: allProductsByShops.map(el => el.id)
       });
@@ -56,7 +61,7 @@ export default class UserLists extends Component {
     const allProducts = this.props.lists.products;
     const switchCheckedStatus = () => allProducts.every(el => el.selected) ? 'uncheck-all' : 'check-all';
 
-    this.props.checkProducts({ option: switchCheckedStatus() })
+    this.props.checkProductsAction({ option: switchCheckedStatus() })
   }
 
   get productsStatusForSelectedShops() {
@@ -161,9 +166,9 @@ export default class UserLists extends Component {
                   <SavedLists
                       userId={this.props.userId}
                       getSelectedItems={this.selectedItems}
-                      saveList={this.props.saveList}
-                      loadList={this.props.loadList}
-                      listsArr={this.props.listsArr}/>
+                      saveList={this.props.saveListAction}
+                      loadList={this.props.loadListsAction}
+                      listsArr={this.props.savedList.listsArr}/>
               </Fragment>
               : <Preloader />
           }
@@ -172,7 +177,7 @@ export default class UserLists extends Component {
   }
 }
 
-UserLists.propTypes = {
+Dashboard.propTypes = {
   getData: PropTypes.func.isRequired,
   data: PropTypes.object,
   isLoading: PropTypes.bool.isRequired,
@@ -181,5 +186,32 @@ UserLists.propTypes = {
   checkShops: PropTypes.func.isRequired,
   checkProducts: PropTypes.func.isRequired,
   userId : PropTypes.string.isRequired,
-  saveList: PropTypes.func.isRequired
+  saveListAction: PropTypes.func.isRequired,
+  loadListsAction: PropTypes.func.isRequired
 }
+
+const mapStateToProps = (state) => {
+  return {
+      isLoading: state.data.isLoading,
+      lists: state.data.lists,
+      error: state.data.error,
+      savedList: state.savedList,
+      userId: state.auth.user._id
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    getDataAction: () => dispatch(getData()),   
+
+    selectProductAction: (id) => dispatch(selectProduct(id)),
+    selectShopAction: (id) => dispatch(selectShop(id)),
+    checkShopsAction: (value) => dispatch(checkUncheckAllShops(value)),
+    checkProductsAction: (value) => dispatch(checkUncheckAllProducts(value)),
+
+    saveListAction: (listObj) => dispatch(saveList(listObj)),
+    loadListsAction: (option) => dispatch(loadLists(option))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

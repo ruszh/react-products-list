@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import AuthForm from '../../components/AuthForm';
 import { connect } from 'react-redux';
+import { signin, signup } from '../../actions/AuthActions';
 //import AuthService from '../../services/AuthService';
 import Alert from '../../components/Alert';
 
@@ -47,7 +48,7 @@ class Authentification extends Component {
             password: form.elements['password'].value
         }
 
-        this.props.signup(user);
+        this.props.signupAction(user);
     }
 
     signupToggleHandler = () => {
@@ -63,7 +64,7 @@ class Authentification extends Component {
         const email = form.elements['email'].value.toLowerCase();
         const password = form.elements['password'].value.toLowerCase();
 
-        this.props.signin({ email, password });
+        this.props.signinAction({ email, password });
     }
 
     render() {
@@ -85,21 +86,23 @@ class Authentification extends Component {
 }
 
 Authentification.propTypes = {
-    signin: PropTypes.func.isRequired,
+    signinAction: PropTypes.func.isRequired,
     error: PropTypes.string,
     message: PropTypes.string,
-    signup: PropTypes.func.isRequired
+    signupAction: PropTypes.func.isRequired
 }
 
 const mapStateToProps = (state) => {
     return {
-
+        error: state.auth.error,
+        message: state.auth.message
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-
+        signinAction: (user) => dispatch(signin(user)),
+        signupAction: (user) => dispatch(signup(user)),
     }
 }
 

@@ -1,12 +1,8 @@
 import React, { Component, Fragment } from 'react';
-import UserLists from '../UserLists';
+import Dashboard from '../Dashboard';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { getData } from '../../actions/DataActions';
-import { selectProduct, checkUncheckAllProducts } from '../../actions/ProductsListActions';
-import { selectShop, checkUncheckAllShops } from '../../actions/ShopsListActions';
-import { signin, verify, logout, signup } from '../../actions/AuthActions';
-import { saveList, loadLists } from '../../actions/SavedListActions';
+import { verify, logout, } from '../../actions/AuthActions';
 import Authentication from '../Authentification';
 import Header from '../../components/Header';
 
@@ -20,45 +16,18 @@ class App extends Component {
 
   render() {
     const {
-      getDataAction,
-      selectProductAction,
-      selectShopAction,
-      checkShopsAction,
-      checkProductsAction,
-      signinAction,
       logoutAction,
-      signupAction,
-      saveListAction,
-      loadListsAction,
-      savedList,
-      auth,
-      data
+      auth
     } = this.props;
     return (
       <div className="App container">
       { this.props.auth.login ?
             <Fragment>
                 <Header email={auth.user.email} logout={logoutAction}/>
-                <UserLists
-                    selectProduct={selectProductAction}
-                    selectShop={selectShopAction}
-                    getData={getDataAction}
-                    lists={data.lists}
-                    isLoading={data.isLoading}
-                    checkShops={checkShopsAction}
-                    checkProducts={checkProductsAction}
-                    userId={auth.user._id}
-                    saveList={saveListAction}
-                    loadList={loadListsAction}
-                    listsArr={savedList.listsArr}/>
+                <Dashboard />
             </Fragment>
                 :
-            <Authentication
-                signin={signinAction}
-                error={auth.error}
-                message={auth.message}
-                signup={signupAction}
-                />
+            <Authentication />
       }
 
 
@@ -69,26 +38,13 @@ class App extends Component {
 
 const mapStateToProps = (store) => {
   return {
-    data: store.data,
-    auth: store.auth,
-    savedList: store.savedList
+    auth: store.auth
   }
 }
 const mapDispatchToProps = dispatch => {
   return {
-    getDataAction: () => dispatch(getData()),
-    selectProductAction: (id) => dispatch(selectProduct(id)),
-    selectShopAction: (id) => dispatch(selectShop(id)),
-    checkShopsAction: (value) => dispatch(checkUncheckAllShops(value)),
-    checkProductsAction: (value) => dispatch(checkUncheckAllProducts(value)),
-    verifyAction: () => dispatch(verify()),
-    //--------------- Auth ------------------------------
-    signinAction: (user) => dispatch(signin(user)),//+
-    logoutAction: () => dispatch(logout()),//+
-    signupAction: (user) => dispatch(signup(user)),//+
-    //--------------------------------------------------
-    saveListAction: (listObj) => dispatch(saveList(listObj)),
-    loadListsAction: (option) => dispatch(loadLists(option))
+    verifyAction: () => dispatch(verify()),   
+    logoutAction: () => dispatch(logout())
   }
 }
 
