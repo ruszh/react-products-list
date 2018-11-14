@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import AuthForm from '../../components/AuthForm';
 import { connect } from 'react-redux';
 import { signin, signup } from '../../actions/AuthActions';
-//import AuthService from '../../services/AuthService';
 import Alert from '../../components/Alert';
 
 import './Authentification.css';

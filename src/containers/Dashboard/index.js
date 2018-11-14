@@ -1,15 +1,22 @@
 import React, { Component, Fragment } from 'react';
-import ProductsList from '../../components/ProductsList';
-import ShopsList from '../../components/ShopsList';
 import PropTypes from 'prop-types';
-import Preloader from '../../components/Preloader';
 import { connect } from 'react-redux';
+
+import './Dashboard.css';
+
 import { sortByName, sortByCheck } from '../../utilities';
-import SavedLists from '../../components/SavedLists';
+
+import Preloader from '../../components/Preloader';
+import Header from '../../components/Header';
+import ListContent from '../../components/ListContent';
+import ModalContainer from '../ModalContainer';
+
 import { getData } from '../../actions/DataActions';
 import { selectProduct, checkUncheckAllProducts } from '../../actions/ProductsListActions';
 import { selectShop, checkUncheckAllShops } from '../../actions/ShopsListActions';
-import { saveList, loadLists } from '../../actions/SavedListActions';
+import { loadLists } from '../../actions/SavedListActions';
+import { logout } from '../../actions/AuthActions';
+import { openModal } from '../../actions/ModalActions';
 
 class Dashboard extends Component {
 
@@ -18,12 +25,10 @@ class Dashboard extends Component {
   }
 
   shopSelectHandler = (e) => {
-    console.log(e.target.value)
     this.props.selectShopAction(e.target.value)
   }
 
   productSelectHandler = (e) => {
-    console.log(e.target.value)
     this.props.selectProductAction(e.target.value)
   }
 
@@ -40,7 +45,7 @@ class Dashboard extends Component {
     const switchCheckedStatus = () => {
       return this.props.lists.shops.every(el => el.selected) ? "uncheck" : "check"
     }
-    this.props.checkShops(switchCheckedStatus())
+    this.props.checkShopsAction(switchCheckedStatus())
   }
 
   checkProductsHandler = () => {
@@ -69,6 +74,7 @@ class Dashboard extends Component {
     const shops = this.props.lists.shops;
     const allProducts = this.props.lists.products.sort(sortByName);
     const selectedShops = shops.filter(el => el.selected);
+
     //--------------filter----------------------
 
     return allProducts.reduce((acc, product) => {
@@ -146,29 +152,48 @@ class Dashboard extends Component {
     return shops.sort(sortByCheck);
   }
 
+  openModalHandler = (name) => {
+      if(name === 'load') {
+        const { userId } = this.props;
+        const option = {
+            userId,
+            page: 1,
+            sort: 'listName'
+        }
+        this.props.loadListsAction(option);
+
+        this.props.openModalAction('load');
+      } else if(name === 'save'){
+        this.props.openModalAction('save');
+      }
+    }
+
   render() {
     const { isLoading } = this.props;
     return (
       <Fragment>
           {   !isLoading ?
               <Fragment>
+                <ModalContainer selectedItems={this.selectedItems}/>
+                <Header email={this.props.email} logout={this.props.logoutAction}/>
                 <div className='row'>
-                  <ShopsList
-                      shops={this.filteredShops}
-                      selectHandler={this.shopSelectHandler}
-                      checkShopsHandler={this.checkShopsHandler}/>
-                  <ProductsList
-                      filteredProducts={this.filteredProducts}
-                      allProducts={this.props.lists.products}
-                      selectHandler={this.productSelectHandler}
-                      checkProductsHandler={this.checkProductsHandler}/>
+                    <ListContent
+                        title='Shops list'
+                        searchItems={this.filteredShops}
+                        items={this.filteredShops}
+                        selectHandler={this.shopSelectHandler}
+                        checkHandler={this.checkShopsHandler}/>
+                    <ListContent
+                        title='Products list'
+                        searchItems={this.props.lists.products}
+                        items={this.filteredProducts}
+                        selectHandler={this.productSelectHandler}
+                        checkHandler={this.checkProductsHandler}/>
                 </div>
-                  <SavedLists
-                      userId={this.props.userId}
-                      getSelectedItems={this.selectedItems}
-                      saveList={this.props.saveListAction}
-                      loadList={this.props.loadListsAction}
-                      listsArr={this.props.savedList.listsArr}/>
+                <div className='row'>
+                    <button className='btn btn-primary' onClick={() => this.openModalHandler('load')}>Load</button>
+                    <button className='btn btn-success' onClick={() => this.openModalHandler('save')}>Save</button>
+                </div>
               </Fragment>
               : <Preloader />
           }
@@ -178,16 +203,17 @@ class Dashboard extends Component {
 }
 
 Dashboard.propTypes = {
-  getData: PropTypes.func.isRequired,
-  data: PropTypes.object,
-  isLoading: PropTypes.bool.isRequired,
-  selectShop: PropTypes.func.isRequired,
-  selectProduct: PropTypes.func.isRequired,
-  checkShops: PropTypes.func.isRequired,
-  checkProducts: PropTypes.func.isRequired,
-  userId : PropTypes.string.isRequired,
-  saveListAction: PropTypes.func.isRequired,
-  loadListsAction: PropTypes.func.isRequired
+    getDataAction: PropTypes.func.isRequired,
+    isLoading: PropTypes.bool.isRequired,
+    selectShopAction: PropTypes.func.isRequired,
+    selectProductAction: PropTypes.func.isRequired,
+    checkShopsAction: PropTypes.func.isRequired,
+    checkProductsAction: PropTypes.func.isRequired,
+    loadListsAction: PropTypes.func.isRequired,
+    logoutAction: PropTypes.func.isRequired,
+    email: PropTypes.string.isRequired,
+    error: PropTypes.string.isRequired,
+    lists: PropTypes.object
 }
 
 const mapStateToProps = (state) => {
@@ -195,22 +221,26 @@ const mapStateToProps = (state) => {
       isLoading: state.data.isLoading,
       lists: state.data.lists,
       error: state.data.error,
-      savedList: state.savedList,
+      email: state.auth.user.email,
+      modal: state.modal,
       userId: state.auth.user._id
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    getDataAction: () => dispatch(getData()),   
+    getDataAction: () => dispatch(getData()),
 
     selectProductAction: (id) => dispatch(selectProduct(id)),
     selectShopAction: (id) => dispatch(selectShop(id)),
     checkShopsAction: (value) => dispatch(checkUncheckAllShops(value)),
     checkProductsAction: (value) => dispatch(checkUncheckAllProducts(value)),
 
-    saveListAction: (listObj) => dispatch(saveList(listObj)),
-    loadListsAction: (option) => dispatch(loadLists(option))
+    loadListsAction: (option) => dispatch(loadLists(option)),
+
+    openModalAction: (name) => dispatch(openModal(name)),
+
+    logoutAction: () => dispatch(logout())
   }
 }
 

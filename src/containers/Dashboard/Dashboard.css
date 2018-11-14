@@ -1,0 +1,16 @@
+.modal-container {
+    padding: 10px 20px;
+}
+.modal-body {
+    min-width: 500px;
+}
+
+.date {
+    float: right;
+    font-size: 1em;
+    color: #0062cc;
+    opacity: .8;
+}
+li {
+    cursor: pointer;
+}

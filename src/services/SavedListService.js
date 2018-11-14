@@ -27,6 +27,24 @@ class SavedListService {
             });
         return result.json();
     }
+    async getList(listId) {
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                listId
+            })
+        };
+
+        const result = await fetch(`${CONFIG.url}list/get`, options);
+        if(result.statusText === 'OK') {
+            return result.json();
+        }
+        return new Error('List not found');
+    }
+
 }
 
 export default new SavedListService();

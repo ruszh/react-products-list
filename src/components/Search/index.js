@@ -11,7 +11,7 @@ export default class Search extends Component {
       showSearchResult: false,
       searchResult: [],
       inputValue: ''
-    };   
+    };
   }
 
 
@@ -55,7 +55,7 @@ export default class Search extends Component {
               type='text'
               className='form-control search-input'
               placeholder='Search'
-              onInput={(e) => {
+              onChange={(e) => {
                 this.setState({inputValue: e.target.value})
                 this.onSearchHandler(e.target.value)
               }}

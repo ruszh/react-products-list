@@ -43,7 +43,6 @@ export function dataReducer(state = initialState, action) {
                 return product;
             })
           }
-
       };
       case SELECT_SHOP:
       return {
@@ -100,6 +99,16 @@ export function dataReducer(state = initialState, action) {
               })
             }
       };
+    // case GET_SELECTED_ITEMS:
+    //     const allItems = {...state.lists };
+    //     const getFilteredResult = arr => arr.filter(el => el.selected).map(el => el.id);
+    //     return {
+    //       ...state,
+    //       selected: {
+    //         shops: getFilteredResult(allItems.shops),
+    //         products: getFilteredResult(allItems.products)
+    //       }
+    //     }
 
     default:
       return state;

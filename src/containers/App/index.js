@@ -1,12 +1,9 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import Dashboard from '../Dashboard';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { verify, logout, } from '../../actions/AuthActions';
+import { verify } from '../../actions/AuthActions';
 import Authentication from '../Authentification';
-import Header from '../../components/Header';
-
-//import './App.css';
 
 class App extends Component {
 
@@ -15,22 +12,10 @@ class App extends Component {
   }
 
   render() {
-    const {
-      logoutAction,
-      auth
-    } = this.props;
+    const { auth } = this.props;
     return (
       <div className="App container">
-      { this.props.auth.login ?
-            <Fragment>
-                <Header email={auth.user.email} logout={logoutAction}/>
-                <Dashboard />
-            </Fragment>
-                :
-            <Authentication />
-      }
-
-
+        { auth.login ? <Dashboard /> : <Authentication /> }
       </div>
     );
   }
@@ -43,14 +28,13 @@ const mapStateToProps = (store) => {
 }
 const mapDispatchToProps = dispatch => {
   return {
-    verifyAction: () => dispatch(verify()),   
-    logoutAction: () => dispatch(logout())
+    verifyAction: () => dispatch(verify())
   }
 }
 
 App.propTypes = {
-  getDataAction: PropTypes.func,
-  userData: PropTypes.object
+  verifyAction: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
