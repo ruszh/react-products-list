@@ -4,19 +4,20 @@ import './List.css';
 
 const List = (props) => (
       <div>
-        <ul className='list-group'>
+        <ul className='list-group item-list'>
           { props.items.map(el => (
                   <li
                       className={el.active ? 'list-group-item' : 'list-group-item not-active'}
                       key={el.id}>
-                  <input
-                      type='checkbox'
-                      className='checkbox'
-                      style={{ marginRight: '10px' }}
-                      checked={ el.selected }
-                      value={ el.id }
-                      onChange={props.selectHandler}/>
-                  {el.name}
+                    <div className='checkbox-container'>
+                      <input
+                          type='checkbox'
+                          className='checkbox'
+                          checked={ el.selected }
+                          value={ el.id }
+                          onChange={props.selectHandler}/>
+                    </div>
+                    {el.name}
                   </li>
                 ))}
         </ul>

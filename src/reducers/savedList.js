@@ -10,7 +10,8 @@ const initState = {
     success: '',
     listsArr: [],
     current: 1,
-    pages: 1
+    pages: 1,
+    sort: 'listName'
 };
 
 export function savedListReducer(state = initState, action) {
@@ -30,7 +31,8 @@ export function savedListReducer(state = initState, action) {
                 ...state,
                 current: action.payload.current,
                 pages: action.payload.pages,
-                listsArr: action.payload.lists
+                listsArr: action.payload.lists,
+                sort: action.payload.sort
             }
         case LOAD_LISTS_ERROR:
             return {

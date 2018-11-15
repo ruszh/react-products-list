@@ -6,7 +6,7 @@ import {
 
 import { SELECT_PRODUCT, CHECK_UNCHECK_ALL_PRODUCTS } from '../actions/ProductsListActions';
 import { SELECT_SHOP, CHECK_UNCHECK_ALL_SHOPS } from '../actions/ShopsListActions';
-
+import { GET_LIST } from '../actions/SavedListActions';
 
 const initialState = {
   lists: [],
@@ -99,16 +99,27 @@ export function dataReducer(state = initialState, action) {
               })
             }
       };
-    // case GET_SELECTED_ITEMS:
-    //     const allItems = {...state.lists };
-    //     const getFilteredResult = arr => arr.filter(el => el.selected).map(el => el.id);
-    //     return {
-    //       ...state,
-    //       selected: {
-    //         shops: getFilteredResult(allItems.shops),
-    //         products: getFilteredResult(allItems.products)
-    //       }
-    //     }
+      case GET_LIST:
+          const list = action.payload.list;
+          return {
+            ...state,
+            lists: {
+              products: state.lists.products.map(el => {
+                  const product = { ...el };
+                  if(list.products.indexOf(product.id) !== -1) {
+                    return { ...product, selected: true }
+                  }
+                  return { ...product, selected: false }
+              }),
+              shops: state.lists.shops.map(el => {
+                const shop = { ...el };
+                if(list.shops.indexOf(shop.id) !== -1) {
+                  return { ...shop, selected: true }
+                }
+                return { ...shop, selected: false }
+              })
+            }
+          }
 
     default:
       return state;

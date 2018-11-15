@@ -1,0 +1,26 @@
+.modal-container {
+    padding: 10px 20px;
+}
+.modal-body {
+    min-width: 500px;
+}
+
+.date {
+    float: right;
+    font-size: 1em;
+    color: #0062cc;
+    opacity: .8;
+    pointer-events: none;
+}
+.saved-list li {
+    cursor: pointer;
+}
+
+.saved-list li:hover {
+    background-color: #007bff;
+    color: white;
+}
+
+.saved-list li:hover span {
+    color: white;
+}

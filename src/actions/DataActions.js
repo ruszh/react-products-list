@@ -26,6 +26,7 @@ export function getData() {
   }
 }
 
+
 // export function getSelectedItems() {
 //     return {
 //       type: GET_SELECTED_ITEMS

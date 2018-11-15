@@ -9,7 +9,6 @@ export const SAVE_LIST_ERROR = 'SAVE_LIST_ERROR';
 export const GET_LIST = 'GET_LIST';
 export const GET_LIST_ERROR = 'GET_LIST_ERROR';
 
-
 export function loadLists(option) {
     return async dispatch => {
         const result = await SavedListService.loadLists(option);
@@ -56,6 +55,6 @@ export function getList(listId) {
         return dispatch({
             type: GET_LIST_ERROR
         })
-
     }
 }
+

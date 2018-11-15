@@ -1,13 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Pagination from '../../components/Pagination';
 
 const LoadModal = (props) => (
       <div className='modal-body'>
-          <div className='modal-container'>
+            <div className='modal-container'>
                 <h2>Saved lists</h2>
             </div>
+            { props.pages > 0 &&
+                    <div className='modal-container form-group row'>
+                        <label className='col-form-label col-3' htmlFor="sort">Sort by:</label>
+                        <select className='form-control col-4' id='sort' onChange={props.sortHandler}>
+                            <option  value='listName'>list name</option>
+                            <option selected={props.sort === 'date'} value='date'>date</option>
+                        </select>
+                    </div>
+            }
+
             <div className='modal-container'>
-                <ul className='list-group'>
+                <ul className='list-group saved-list' style={{ height: '260px' }}>
                     { props.listsArr &&
                         props.listsArr.map(el => {
                                 const date = new Date(el.date).toString();
@@ -25,6 +36,11 @@ const LoadModal = (props) => (
                             }
                         )}
                 </ul>
+            </div>
+            <div className='modal-container'>
+                { props.pages > 0 &&
+                    <Pagination pages={props.pages} current={props.current} selectPageHandler={props.loadLists} />
+                }
             </div>
             <div className='modal-container'>
                 <button className='btn' onClick={props.closeModal}>Close</button>

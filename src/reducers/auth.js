@@ -1,6 +1,7 @@
 import {
     SIGNIN_USER,
     AUTH_ERROR,
+    VERIFICATION_REQUEST,
     VERIFICATION_SUCCESS,
     VERIFICATION_ERROR,
     LOGOUT,
@@ -12,7 +13,8 @@ const initState = {
     user: {},
     login: false,
     error: '',
-    message: ''
+    message: '',
+    isLoading: true
 }
 
 export function authReducer(state = initState, action) {
@@ -22,7 +24,8 @@ export function authReducer(state = initState, action) {
                 ...state,
                 user: action.payload,
                 login: true,
-                error: ''
+                error: '',
+                isLoading: false
             }
         case AUTH_ERROR:
             return {
@@ -31,19 +34,26 @@ export function authReducer(state = initState, action) {
                 user: {},
                 login: false
             }
+        case VERIFICATION_REQUEST:
+            return {
+                ...state,
+                isLoading: true
+            }
         case VERIFICATION_SUCCESS:
             return {
                 ...state,
                 error: '',
                 user: action.payload,
-                login: true
+                login: true,
+                isLoading: false
             }
         case VERIFICATION_ERROR:
             return {
                 ...state,
-                error: '',
+                error: action.payload,
                 user: {},
-                login: false
+                login: false,
+                isLoading: false
             }
         case LOGOUT:
             return {
@@ -62,7 +72,8 @@ export function authReducer(state = initState, action) {
             return {
                 ...state,
                 message: '',
-                error: action.payload
+                error: action.payload,
+                isLoading: false
             }
         default:
             return state;

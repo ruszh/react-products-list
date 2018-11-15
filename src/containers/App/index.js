@@ -1,21 +1,23 @@
 import React, { Component } from 'react';
-import Dashboard from '../Dashboard';
 import PropTypes from 'prop-types';
+
+import Dashboard from '../Dashboard';
+import Authentication from '../Authentification';
+import Preloader from '../../components/Preloader';
+
 import { connect } from 'react-redux';
 import { verify } from '../../actions/AuthActions';
-import Authentication from '../Authentification';
 
 class App extends Component {
-
-  async componentWillMount() {
+  componentWillMount() {
     this.props.verifyAction();
   }
 
   render() {
-    const { auth } = this.props;
+    const { auth, isLoading } = this.props;
     return (
       <div className="App container">
-        { auth.login ? <Dashboard /> : <Authentication /> }
+        { isLoading ? <Preloader /> : auth.login ? <Dashboard /> : <Authentication /> }
       </div>
     );
   }
@@ -23,7 +25,8 @@ class App extends Component {
 
 const mapStateToProps = (store) => {
   return {
-    auth: store.auth
+    auth: store.auth,
+    isLoading: store.auth.isLoading
   }
 }
 const mapDispatchToProps = dispatch => {

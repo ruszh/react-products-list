@@ -4,9 +4,11 @@ import SaveModal from './SaveModal';
 import LoadModal from './LoadModal';
 import PropTypes from 'prop-types';
 
+import './ModalContainer.css';
+
 import { connect } from 'react-redux';
 import { closeModal } from '../../actions/ModalActions';
-import { saveList } from '../../actions/SavedListActions';
+import { saveList, getList, loadLists } from '../../actions/SavedListActions';
 
 class ModalContainer extends Component {
     saveListHandler = (e) => {
@@ -25,18 +27,26 @@ class ModalContainer extends Component {
       this.props.saveListAction(listObj);
       this.props.closeModalAction();
     }
+
+    sortHandler = (e) => {
+      const sort = e.target.value;
+      const page = this.props.current;
+      this.loadListHandler(page, sort);
+    }
+
+    loadListHandler = (page, sort) => {
+      const { userId } = this.props;
+      const option = { userId, page, sort: !sort ? this.props.sort : sort };
+      this.props.loadListsAction(option);
+    }
+
     selectHandler = (e) => {
-      let value;
-      if(e.target.tagName === 'SPAN') {
-        value = e.target.parentElement.dataset.id;
-      } else {
-        value = e.target.dataset.id;
-      }
-      console.log(value)
+      this.props.getListAction(e.target.dataset.id);
+      this.props.closeModalAction();
     }
 
     get modalBody() {
-      const { modal, closeModalAction, savedList } = this.props;
+      const { modal, closeModalAction, savedList, pages, current } = this.props;
 
       switch(modal.name) {
           case 'save':
@@ -47,7 +57,12 @@ class ModalContainer extends Component {
                 return  <LoadModal
                             selectHandler={this.selectHandler}
                             listsArr={savedList.listsArr}
-                            closeModal={closeModalAction}/>
+                            closeModal={closeModalAction}
+                            loadLists={this.loadListHandler}
+                            pages={pages}
+                            current={current}
+                            sortHandler={this.sortHandler}
+                            sort={this.props.sort}/>
           default:
               return null;
       }
@@ -80,14 +95,19 @@ const mapStateToProps = (state) => {
   return {
     modal: state.modal,
     userId: state.auth.user._id,
-    savedList: state.savedList
+    pages: state.savedList.pages,
+    current: state.savedList.current,
+    savedList: state.savedList,
+    sort: state.savedList.sort
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
     closeModalAction: () => dispatch(closeModal()),
-    saveListAction: (listObj) => dispatch(saveList(listObj))
+    saveListAction: (listObj) => dispatch(saveList(listObj)),
+    getListAction: (listId) => dispatch(getList(listId)),
+    loadListsAction: (option) => dispatch(loadLists(option))
   }
 }
 
