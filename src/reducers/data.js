@@ -17,7 +17,10 @@ const initialState = {
 export function dataReducer(state = initialState, action) {
   switch (action.type) {
     case GET_DATA_REQUEST:
-      return { ...state, isLoading: action.payload, error: "" };
+      return {
+        ...state,
+        isLoading: true
+      };
 
     case GET_DATA_SUCCESS:
       return {

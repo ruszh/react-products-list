@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import './Pagination.css';
+import { generateSequence } from '../../utilities';
 
 //props: pages, current, selectPageHandler
 
@@ -24,11 +25,9 @@ export default class Pagination extends Component {
     }
     get pages() {
         const { current, pages } = this.props;
-        const allPages = [];
 
-        for(let i = 1; i <= pages; i++) {
-            allPages.push(i);
-        }
+        const allPages = [...generateSequence(pages)];
+
         if(pages < 6) {
             return allPages;
         } else if(current <= 3) {

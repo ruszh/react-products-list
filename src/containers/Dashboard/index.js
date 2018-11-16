@@ -11,7 +11,7 @@ import Header from '../../components/Header';
 import ListContent from '../../components/ListContent';
 import ModalContainer from '../ModalContainer';
 
-import { getData } from '../../actions/DataActions';
+import { dataRequest } from '../../actions/DataActions';
 import { selectProduct, checkUncheckAllProducts } from '../../actions/ProductsListActions';
 import { selectShop, checkUncheckAllShops } from '../../actions/ShopsListActions';
 import { loadLists } from '../../actions/SavedListActions';
@@ -21,7 +21,7 @@ import { openModal } from '../../actions/ModalActions';
 class Dashboard extends Component {
 
   componentWillMount = () => {
-    this.props.getDataAction();
+    this.props.dataRequest();
   }
 
   shopSelectHandler = (e) => {
@@ -202,7 +202,7 @@ class Dashboard extends Component {
 }
 
 Dashboard.propTypes = {
-    getDataAction: PropTypes.func.isRequired,
+
     isLoading: PropTypes.bool.isRequired,
     selectShopAction: PropTypes.func.isRequired,
     selectProductAction: PropTypes.func.isRequired,
@@ -212,7 +212,7 @@ Dashboard.propTypes = {
     logoutAction: PropTypes.func.isRequired,
     email: PropTypes.string.isRequired,
     error: PropTypes.string.isRequired,
-    lists: PropTypes.object
+    //lists: PropTypes.object
 }
 
 const mapStateToProps = (state) => {
@@ -229,7 +229,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    getDataAction: () => dispatch(getData()),
+    dataRequest: () => dispatch(dataRequest()),
 
     selectProductAction: (id) => dispatch(selectProduct(id)),
     selectShopAction: (id) => dispatch(selectShop(id)),

@@ -1,7 +1,10 @@
 import SavedListService from '../services/SavedListService';
 
-export const LOAD_LISTS = 'LOAD_LISTS';
+export const LOAD_LIST_REQUEST = 'LOAD_LIST_REQUEST';
+export const LOAD_LIST_SUCCESS = 'LOAD_LIST_SUCCESS';
 export const LOAD_LISTS_ERROR = 'LOAD_LISTS_ERROR';
+
+export const LOAD_LISTS = 'LOAD_LISTS';
 
 export const SAVE_LIST = 'SAVE_LIST';
 export const SAVE_LIST_ERROR = 'SAVE_LIST_ERROR';

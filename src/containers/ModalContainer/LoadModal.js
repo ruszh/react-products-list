@@ -10,9 +10,12 @@ const LoadModal = (props) => (
             { props.pages > 0 &&
                     <div className='modal-container form-group row'>
                         <label className='col-form-label col-3' htmlFor="sort">Sort by:</label>
-                        <select className='form-control col-4' id='sort' onChange={props.sortHandler}>
-                            <option  value='listName'>list name</option>
-                            <option selected={props.sort === 'date'} value='date'>date</option>
+                        <select className='form-control col-4'
+                                defaultValue={props.sort}
+                                id='sort'
+                                onChange={props.sortHandler}>
+                            <option value='listName'>list name</option>
+                            <option value='date'>date</option>
                         </select>
                     </div>
             }
