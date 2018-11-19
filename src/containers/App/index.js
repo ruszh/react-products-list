@@ -6,7 +6,7 @@ import Authentication from '../Authentification';
 import Preloader from '../../components/Preloader';
 
 import { connect } from 'react-redux';
-import { verify } from '../../actions/AuthActions';
+import { verificationRequest } from '../../actions/AuthActions';
 
 class App extends Component {
   componentWillMount() {
@@ -31,7 +31,7 @@ const mapStateToProps = (store) => {
 }
 const mapDispatchToProps = dispatch => {
   return {
-    verifyAction: () => dispatch(verify())
+    verifyAction: () => dispatch(verificationRequest())
   }
 }
 

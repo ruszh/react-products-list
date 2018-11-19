@@ -14,7 +14,7 @@ import ModalContainer from '../ModalContainer';
 import { dataRequest } from '../../actions/DataActions';
 import { selectProduct, checkUncheckAllProducts } from '../../actions/ProductsListActions';
 import { selectShop, checkUncheckAllShops } from '../../actions/ShopsListActions';
-import { loadLists } from '../../actions/SavedListActions';
+import { loadListsRequest } from '../../actions/SavedListActions';
 import { logout } from '../../actions/AuthActions';
 import { openModal } from '../../actions/ModalActions';
 
@@ -175,6 +175,7 @@ class Dashboard extends Component {
               <Fragment>
                 <ModalContainer selectedItems={this.selectedItems}/>
                 <Header email={this.props.email} logout={this.props.logoutAction}/>
+
                 <div className='row'>
                     <ListContent
                         title='Shops list'
@@ -236,7 +237,7 @@ const mapDispatchToProps = dispatch => {
     checkShopsAction: (value) => dispatch(checkUncheckAllShops(value)),
     checkProductsAction: (value) => dispatch(checkUncheckAllProducts(value)),
 
-    loadListsAction: (option) => dispatch(loadLists(option)),
+    loadListsAction: (option) => dispatch(loadListsRequest(option)),
 
     openModalAction: (name) => dispatch(openModal(name)),
 

@@ -8,7 +8,7 @@ import './ModalContainer.css';
 
 import { connect } from 'react-redux';
 import { closeModal } from '../../actions/ModalActions';
-import { saveList, getList, loadLists } from '../../actions/SavedListActions';
+import { saveListRequest, getListRequest, loadListsRequest } from '../../actions/SavedListActions';
 
 class ModalContainer extends Component {
     saveListHandler = (e) => {
@@ -105,9 +105,9 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = dispatch => {
   return {
     closeModalAction: () => dispatch(closeModal()),
-    saveListAction: (listObj) => dispatch(saveList(listObj)),
-    getListAction: (listId) => dispatch(getList(listId)),
-    loadListsAction: (option) => dispatch(loadLists(option))
+    saveListAction: (listObj) => dispatch(saveListRequest(listObj)),
+    getListAction: (listId) => dispatch(getListRequest(listId)),
+    loadListsAction: (option) => dispatch(loadListsRequest(option))
   }
 }
 

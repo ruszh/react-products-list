@@ -6,7 +6,7 @@ import {
 
 import { SELECT_PRODUCT, CHECK_UNCHECK_ALL_PRODUCTS } from '../actions/ProductsListActions';
 import { SELECT_SHOP, CHECK_UNCHECK_ALL_SHOPS } from '../actions/ShopsListActions';
-import { GET_LIST } from '../actions/SavedListActions';
+import { GET_LIST_ERROR, GET_LIST_SUCCESS } from '../actions/SavedListActions';
 
 const initialState = {
   lists: [],
@@ -102,7 +102,7 @@ export function dataReducer(state = initialState, action) {
               })
             }
       };
-      case GET_LIST:
+      case GET_LIST_SUCCESS:
           const list = action.payload.list;
           return {
             ...state,
@@ -122,6 +122,11 @@ export function dataReducer(state = initialState, action) {
                 return { ...shop, selected: false }
               })
             }
+          }
+        case GET_LIST_ERROR:
+          return {
+            ...state,
+            error: action.payload
           }
 
     default:

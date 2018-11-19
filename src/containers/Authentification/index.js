@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import AuthForm from '../../components/AuthForm';
 import { connect } from 'react-redux';
-import { signin, signup } from '../../actions/AuthActions';
+import { signinRequest, signupRequest } from '../../actions/AuthActions';
 import Alert from '../../components/Alert';
 
 import './Authentification.css';
@@ -67,12 +67,12 @@ class Authentification extends Component {
     }
 
     render() {
-        const { error, message } = this.props;
+        const { error, message, formIsValid } = this.props;
         return (
         <Fragment>
             <AuthForm
                 submitHandler={this.onSubmitHandler}
-                isValid={ error ? false : true }
+                isValid={ formIsValid ? true : false }
                 signupHandler={this.onSignupHandler}
                 signupToggle={this.signupToggleHandler}
                 signup={this.state.signupMode}
@@ -88,20 +88,22 @@ Authentification.propTypes = {
     signinAction: PropTypes.func.isRequired,
     error: PropTypes.string,
     message: PropTypes.string,
-    signupAction: PropTypes.func.isRequired
+    signupAction: PropTypes.func.isRequired,
+
 }
 
 const mapStateToProps = (state) => {
     return {
         error: state.auth.error,
-        message: state.auth.message
+        message: state.auth.message,
+        formIsValid: state.auth.formIsValid
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        signinAction: (user) => dispatch(signin(user)),
-        signupAction: (user) => dispatch(signup(user)),
+        signinAction: (user) => dispatch(signinRequest(user)),
+        signupAction: (user) => dispatch(signupRequest(user)),
     }
 }
 

@@ -44,7 +44,8 @@ export default class Pagination extends Component {
         return (
         <Fragment>
             <ul className='pagination'>
-                <li style={{width: '64px'}} className={ current > 1 ? "" : "disabled"} onClick={this.prevPage}>prev</li>
+                { pages > 1 &&
+                    <li style={{width: '64px'}} className={ current > 1 ? "" : "disabled"} onClick={this.prevPage}>prev</li> }
                 { current > 3 && pages > 5 &&
                     <li onClick={this.selectPage} data-page='1'>...</li> }
                 { this.pages.map(el => (
@@ -58,7 +59,8 @@ export default class Pagination extends Component {
                 )) }
                 { current < pages - 2 && pages > 6 &&
                    <li onClick={this.selectPage} data-page={pages}>...</li> }
-                <li onClick={this.nextPage} className={ current !== pages ? "" : "disabled"} style={{width: '64px'}}>next</li>
+                { pages > 1 &&
+                    <li onClick={this.nextPage} className={ current !== pages ? "" : "disabled"} style={{width: '64px'}}>next</li> }
             </ul>
         </Fragment>
         )
