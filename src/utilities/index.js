@@ -4,4 +4,14 @@ export function* generateSequence(end) {
     for(let i = 1; i <= end; i++) {
         yield i;
     }
-}
+};
+
+export const createConstant = (name) => ({
+    request: `${name}_REQUEST`,
+    success: `${name}_SUCCESS`,
+    error: `${name}_ERROR`
+});
+
+export const createAction = type => payload => ({
+    type, payload
+});

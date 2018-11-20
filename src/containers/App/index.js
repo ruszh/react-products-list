@@ -6,7 +6,9 @@ import Authentication from '../Authentification';
 import Preloader from '../../components/Preloader';
 
 import { connect } from 'react-redux';
-import { verificationRequest } from '../../actions/AuthActions';
+
+import { createAction } from '../../utilities';
+import { VERIFICATION } from '../../constants';
 
 class App extends Component {
   componentWillMount() {
@@ -29,15 +31,12 @@ const mapStateToProps = (store) => {
     isLoading: store.auth.isLoading
   }
 }
-const mapDispatchToProps = dispatch => {
-  return {
-    verifyAction: () => dispatch(verificationRequest())
-  }
-}
 
 App.propTypes = {
   verifyAction: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(mapStateToProps, {
+  verifyAction: createAction(VERIFICATION.request)
+})(App);

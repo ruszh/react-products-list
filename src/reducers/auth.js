@@ -1,15 +1,4 @@
-import {
-    SIGNIN_REQUEST,
-    SIGNIN_SUCCESS,
-    SIGNIN_ERROR,
-    VERIFICATION_REQUEST,
-    VERIFICATION_SUCCESS,
-    VERIFICATION_ERROR,
-    LOGOUT,
-    SIGNUP_REQUEST,
-    SIGNUP_SUCCESS,
-    SIGNUP_ERROR
- } from '../actions/AuthActions';
+import { SIGNIN, VERIFICATION, SIGNUP, LOGOUT } from '../constants';
 
 const initState = {
     user: {},
@@ -22,12 +11,12 @@ const initState = {
 
 export function authReducer(state = initState, action) {
     switch(action.type) {
-        case SIGNIN_REQUEST:
+        case SIGNIN.request:
             return {
                 ...state,
                 isLoading: true
             }
-        case SIGNIN_SUCCESS:
+        case SIGNIN.success:
             return {
                 ...state,
                 user: action.payload,
@@ -36,7 +25,7 @@ export function authReducer(state = initState, action) {
                 isLoading: false,
                 formIsValid: true
             }
-        case SIGNIN_ERROR:
+        case SIGNIN.error:
             return {
                 ...state,
                 user: {},
@@ -46,12 +35,12 @@ export function authReducer(state = initState, action) {
                 formIsValid: false
             }
 
-        case VERIFICATION_REQUEST:
+        case VERIFICATION.request:
             return {
                 ...state,
                 isLoading: true
             }
-        case VERIFICATION_SUCCESS:
+        case VERIFICATION.success:
             return {
                 ...state,
                 error: '',
@@ -59,7 +48,7 @@ export function authReducer(state = initState, action) {
                 login: true,
                 isLoading: false
             }
-        case VERIFICATION_ERROR:
+        case VERIFICATION.error:
             return {
                 ...state,
                 error: action.payload,
@@ -67,26 +56,26 @@ export function authReducer(state = initState, action) {
                 login: false,
                 isLoading: false
             }
-        case LOGOUT:
+        case LOGOUT.success:
             return {
                 ...state,
                 error: '',
                 user: {},
                 login: false
             }
-        case SIGNUP_REQUEST:
+        case SIGNUP.request:
             return {
                 ...state,
                 isLoading: true
             }
-        case SIGNUP_SUCCESS:
+        case SIGNUP.success:
             return {
                 ...state,
                 error: '',
                 message: action.payload,
                 isLoading: false
             }
-        case SIGNUP_ERROR:
+        case SIGNUP.error:
             return {
                 ...state,
                 message: '',

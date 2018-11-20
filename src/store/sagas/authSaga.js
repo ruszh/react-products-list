@@ -1,17 +1,7 @@
 import { put, call, takeEvery } from 'redux-saga/effects';
-import {
-    SIGNIN_ERROR,
-    SIGNIN_REQUEST,
-    SIGNIN_SUCCESS,
 
-    VERIFICATION_ERROR,
-    VERIFICATION_REQUEST,
-    VERIFICATION_SUCCESS,
-
-    SIGNUP_REQUEST,
-    SIGNUP_SUCCESS,
-    SIGNUP_ERROR
-} from '../../actions/AuthActions';
+import { SIGNIN, VERIFICATION, SIGNUP, LOGOUT } from '../../constants';
+import { createAction } from '../../utilities';
 import AuthService from '../../services/AuthService';
 
 function* signin(action) {
@@ -23,12 +13,11 @@ function* signin(action) {
                 email: response.data.email
             }
             localStorage.setItem('token', response.token);
-            yield put({ type: SIGNIN_SUCCESS, payload: signinUser});
-            return;
+            return yield put(createAction(SIGNIN.success)(signinUser));
         }
-        yield put({ type: SIGNIN_ERROR, payload: response.error })
+        yield put(createAction(SIGNIN.error)(response.error))
     } catch (err) {
-        yield put({ type: SIGNIN_ERROR, payload: err})
+        yield put(createAction(SIGNIN.error)(err))
     }
 }
 
@@ -36,13 +25,12 @@ function* verify() {
     try {
         const response = yield call(AuthService.virification);
         if(response.error) {
-            yield put({ type: VERIFICATION_ERROR, payload: response.error });
-            return;
+            return yield put(createAction(VERIFICATION.error)(response.error));
         }
-        yield put({ type: VERIFICATION_SUCCESS, payload: response.user })
+        yield put(createAction(VERIFICATION.success)(response.user))
 
     } catch (err) {
-        yield put({ type: VERIFICATION_ERROR, payload: err })
+        yield put(createAction(VERIFICATION.error)(err))
     }
 }
 
@@ -50,18 +38,22 @@ function* signup(action) {
     try {
         const result = yield call(AuthService.signup, action.payload);
         if(result.success) {
-            yield put({ type: SIGNUP_SUCCESS, payload: result.success })
-            return;
+            return yield put(createAction(SIGNUP.success)(result.success))
         }
-        yield put({ type: SIGNUP_ERROR, payload: result.error})
+        yield put(createAction(SIGNUP.error)(result.error))
     } catch (err) {
-        yield put({ type: SIGNUP_ERROR, payload: err})
+        yield put(createAction(SIGNUP.error)(err))
     }
 }
 
+function* logout() {
+    localStorage.removeItem('token');
+    yield put(createAction(LOGOUT.success)())
+}
 
 export function* watchAuth() {
-    yield takeEvery(SIGNIN_REQUEST, signin);
-    yield takeEvery(VERIFICATION_REQUEST, verify);
-    yield takeEvery(SIGNUP_REQUEST, signup);
+    yield takeEvery(SIGNIN.request, signin);
+    yield takeEvery(VERIFICATION.request, verify);
+    yield takeEvery(SIGNUP.request, signup);
+    yield takeEvery(LOGOUT.request, logout);
 }

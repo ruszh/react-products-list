@@ -1,9 +1,4 @@
-import {
-    LOAD_LIST_SUCCESS,
-    LOAD_LIST_ERROR,
-    SAVE_LIST_SUCCESS,
-    SAVE_LIST_ERROR
-} from '../actions/SavedListActions';
+import { LOAD_LIST, SAVE_LIST } from '../constants';
 
 const initState = {
     error: '',
@@ -16,17 +11,17 @@ const initState = {
 
 export function savedListReducer(state = initState, action) {
     switch(action.type) {
-        case SAVE_LIST_SUCCESS:
+        case SAVE_LIST.success:
             return {
                 ...state,
                 success: action.payload
             }
-        case SAVE_LIST_ERROR:
+        case SAVE_LIST.error:
             return {
                 ...state,
                 error: action.payload
             }
-        case LOAD_LIST_SUCCESS:
+        case LOAD_LIST.success:
             return {
                 ...state,
                 current: action.payload.current,
@@ -34,7 +29,7 @@ export function savedListReducer(state = initState, action) {
                 listsArr: action.payload.lists,
                 sort: action.payload.sort
             }
-        case LOAD_LIST_ERROR:
+        case LOAD_LIST.error:
             return {
                 ...state,
                 error: action.payload

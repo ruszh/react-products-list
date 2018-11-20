@@ -1,12 +1,10 @@
 import {
-  GET_DATA_REQUEST,
-  GET_DATA_SUCCESS,
-  GET_DATA_ERROR
-} from '../actions/DataActions';
-
-import { SELECT_PRODUCT, CHECK_UNCHECK_ALL_PRODUCTS } from '../actions/ProductsListActions';
-import { SELECT_SHOP, CHECK_UNCHECK_ALL_SHOPS } from '../actions/ShopsListActions';
-import { GET_LIST_ERROR, GET_LIST_SUCCESS } from '../actions/SavedListActions';
+    GET_DATA,
+    GET_LIST,
+    SELECT_PRODUCT,
+    CHECK_UNCHECK_ALL_PRODUCTS,
+    SELECT_SHOP,
+    CHECK_UNCHECK_ALL_SHOPS } from '../constants';
 
 const initialState = {
   lists: [],
@@ -16,13 +14,13 @@ const initialState = {
 
 export function dataReducer(state = initialState, action) {
   switch (action.type) {
-    case GET_DATA_REQUEST:
+    case GET_DATA.request:
       return {
         ...state,
         isLoading: true
       };
 
-    case GET_DATA_SUCCESS:
+    case GET_DATA.success:
       return {
         ...state,
         lists: action.payload,
@@ -30,100 +28,48 @@ export function dataReducer(state = initialState, action) {
         error: ""
       };
 
-    case GET_DATA_ERROR:
+    case GET_DATA.error:
       return { ...state, isLoading: false, error: action.payload };
 
-    case SELECT_PRODUCT:
+    case SELECT_PRODUCT.success:
       return {
           ...state,
           lists: {
                 ...state.lists,
-                products: state.lists.products.map(el => {
-                  const product = { ...el }
-                if(el.id === Number(action.payload)) {
-                  return { ...product, selected: !el.selected }
-                }
-                return product;
-            })
+                products: action.payload
           }
       };
-      case SELECT_SHOP:
+      case SELECT_SHOP.success:
       return {
           ...state,
           lists: {
                 ...state.lists,
-                shops: state.lists.shops.map(el => {
-                const shop = { ...el }
-                if(el.id === Number(action.payload)) {
-                  return { ...shop, selected: !el.selected }
-                }
-                return shop;
-            })
+                shops: action.payload
           }
 
       };
-      case CHECK_UNCHECK_ALL_PRODUCTS:
+      case CHECK_UNCHECK_ALL_PRODUCTS.success:
           return {
             ...state,
             lists: {
               ...state.lists,
-              products: state.lists.products.map(el => {
-                const product = { ...el }
-                if(action.payload.option === 'check') {
-                  if(action.payload.arr.indexOf(el.id) !== -1) {
-                    return { ...product, selected: true }
-                  }
-                  return { ...product }
-                } else if(action.payload.option === 'uncheck') {
-                  if(action.payload.arr.indexOf(el.id) !== -1) {
-                    return { ...product, selected: false}
-                  }
-                  return { ...product }
-                } else if(action.payload.option === 'check-all') {
-                  return { ...product, selected: true }
-                } else {
-                  return { ...product, selected: false }
-                }
-
-              })
+              products: action.payload
             }
           };
-      case CHECK_UNCHECK_ALL_SHOPS:
+      case CHECK_UNCHECK_ALL_SHOPS.success:
           return {
             ...state,
             lists: {
               ...state.lists,
-              shops: state.lists.shops.map(el => {
-                const shop = { ...el };
-                if(action.payload === 'check') {
-                  return { ...shop, selected: true }
-                }
-                return { ...shop, selected: false}
-              })
+              shops: action.payload
             }
       };
-      case GET_LIST_SUCCESS:
-          const list = action.payload.list;
+      case GET_LIST.success:
           return {
             ...state,
-            lists: {
-              products: state.lists.products.map(el => {
-                  const product = { ...el };
-                  if(list.products.indexOf(product.id) !== -1) {
-                    return { ...product, selected: true }
-                  }
-                  return { ...product, selected: false }
-              }),
-              shops: state.lists.shops.map(el => {
-                const shop = { ...el };
-                if(list.shops.indexOf(shop.id) !== -1) {
-                  return { ...shop, selected: true }
-                }
-                return { ...shop, selected: false }
-              })
-            }
+            lists: action.payload
           }
-        case GET_LIST_ERROR:
+        case GET_LIST.error:
           return {
             ...state,
             error: action.payload

@@ -1,20 +1,19 @@
 import { put, call, takeEvery } from 'redux-saga/effects';
-import {
-    GET_DATA_REQUEST,
-    GET_DATA_SUCCESS,
-    GET_DATA_ERROR
-} from '../../actions/DataActions';
+
+import { GET_DATA } from '../../constants';
 import DataService from '../../services/DataService';
+
+import { createAction } from '../../utilities';
 
 function* fetchData(action) {
     try {
         const data = yield call(DataService.getData);
-        yield put({ type: GET_DATA_SUCCESS, payload: data })
+        yield put(createAction(GET_DATA.success)(data))
     } catch (err) {
-        yield put({ type: GET_DATA_ERROR, payload: err })
+        yield put(createAction(GET_DATA.error)(err))
     }
 }
 
 export function* watchFetchData() {
-    yield takeEvery(GET_DATA_REQUEST, fetchData)
+    yield takeEvery(GET_DATA.request, fetchData)
 }

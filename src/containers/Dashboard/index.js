@@ -11,12 +11,16 @@ import Header from '../../components/Header';
 import ListContent from '../../components/ListContent';
 import ModalContainer from '../ModalContainer';
 
-import { dataRequest } from '../../actions/DataActions';
-import { selectProduct, checkUncheckAllProducts } from '../../actions/ProductsListActions';
-import { selectShop, checkUncheckAllShops } from '../../actions/ShopsListActions';
-import { loadListsRequest } from '../../actions/SavedListActions';
-import { logout } from '../../actions/AuthActions';
-import { openModal } from '../../actions/ModalActions';
+import { createAction } from '../../utilities';
+import {
+  SELECT_PRODUCT,
+  SELECT_SHOP,
+  CHECK_UNCHECK_ALL_PRODUCTS,
+  CHECK_UNCHECK_ALL_SHOPS,
+  OPEN_MODAL,
+  GET_DATA,
+  LOAD_LIST,
+  LOGOUT } from '../../constants';
 
 class Dashboard extends Component {
 
@@ -175,7 +179,6 @@ class Dashboard extends Component {
               <Fragment>
                 <ModalContainer selectedItems={this.selectedItems}/>
                 <Header email={this.props.email} logout={this.props.logoutAction}/>
-
                 <div className='row'>
                     <ListContent
                         title='Shops list'
@@ -228,21 +231,18 @@ const mapStateToProps = (state) => {
   }
 }
 
-const mapDispatchToProps = dispatch => {
-  return {
-    dataRequest: () => dispatch(dataRequest()),
 
-    selectProductAction: (id) => dispatch(selectProduct(id)),
-    selectShopAction: (id) => dispatch(selectShop(id)),
-    checkShopsAction: (value) => dispatch(checkUncheckAllShops(value)),
-    checkProductsAction: (value) => dispatch(checkUncheckAllProducts(value)),
+export default connect(mapStateToProps, {
+    dataRequest: createAction(GET_DATA.request),
 
-    loadListsAction: (option) => dispatch(loadListsRequest(option)),
+    selectProductAction: createAction(SELECT_PRODUCT.request),
+    selectShopAction: createAction(SELECT_SHOP.request),
+    checkShopsAction: createAction(CHECK_UNCHECK_ALL_SHOPS.request),
+    checkProductsAction: createAction(CHECK_UNCHECK_ALL_PRODUCTS.request),
 
-    openModalAction: (name) => dispatch(openModal(name)),
+    loadListsAction: createAction(LOAD_LIST.request),
 
-    logoutAction: () => dispatch(logout())
-  }
-}
+    openModalAction: createAction(OPEN_MODAL),
 
-export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
+    logoutAction: createAction(LOGOUT.request)
+})(Dashboard);

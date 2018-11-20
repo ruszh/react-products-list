@@ -2,8 +2,10 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import AuthForm from '../../components/AuthForm';
 import { connect } from 'react-redux';
-import { signinRequest, signupRequest } from '../../actions/AuthActions';
 import Alert from '../../components/Alert';
+
+import { createAction } from '../../utilities';
+import { SIGNIN, SIGNUP } from '../../constants';
 
 import './Authentification.css';
 
@@ -100,11 +102,8 @@ const mapStateToProps = (state) => {
     }
 }
 
-const mapDispatchToProps = dispatch => {
-    return {
-        signinAction: (user) => dispatch(signinRequest(user)),
-        signupAction: (user) => dispatch(signupRequest(user)),
-    }
-}
 
-export default connect(mapStateToProps, mapDispatchToProps)(Authentification);
+export default connect(mapStateToProps, {
+    signinAction: createAction(SIGNIN.request),
+    signupAction: createAction(SIGNUP.request),
+})(Authentification);
