@@ -37,3 +37,9 @@ export const CHECK_UNCHECK_ALL_PRODUCTS = createConstant('CHECK_UNCHECK_ALL_PROD
 
 export const SELECT_SHOP = createConstant('SELECT_SHOP');
 export const CHECK_UNCHECK_ALL_SHOPS = createConstant('CHECK_UNCHECK_ALL_SHOPS');
+
+
+//-------------------Alert constants--------------------------
+
+export const ALERT_SUCCESS = 'ALERT_SUCCESS';
+export const ALERT_ERROR = 'ALERT_ERROR';

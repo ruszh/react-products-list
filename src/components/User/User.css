@@ -1,0 +1,9 @@
+
+.user-info {
+    font-size: 2em;
+    margin: 0 15px;
+    text-align: center;
+}
+.user-info button {
+    font-size: 0.75em;
+}

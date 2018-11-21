@@ -1,4 +1,10 @@
-import { SIGNIN, VERIFICATION, SIGNUP, LOGOUT } from '../constants';
+import {
+    SIGNIN,
+    VERIFICATION,
+    SIGNUP,
+    LOGOUT,
+    ALERT_ERROR,
+    ALERT_SUCCESS } from '../constants';
 
 const initState = {
     user: {},
@@ -72,15 +78,26 @@ export function authReducer(state = initState, action) {
             return {
                 ...state,
                 error: '',
-                message: action.payload,
-                isLoading: false
+                isLoading: false,
+                formIsValid: true
             }
         case SIGNUP.error:
             return {
                 ...state,
                 message: '',
-                error: action.payload,
                 isLoading: false
+            }
+        case ALERT_ERROR:
+            return {
+                ...state,
+                message: '',
+                error: action.payload
+            }
+        case ALERT_SUCCESS:
+            return {
+                ...state,
+                message: action.payload,
+                error: ''
             }
         default:
             return state;

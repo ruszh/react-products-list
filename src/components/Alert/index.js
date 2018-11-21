@@ -1,9 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import './Alert.css';
 
 const Alert = (props) => (
-    <div style={{ width: '300px', margin: 'auto', marginBottom: '10px' }} className={`alert alert-${props.type}`} role="alert">
-        {props.message}
+    <div className='alert-container'>
+        <div className={`alert alert-${props.type}`} role="alert">
+            {props.message}
+        </div>
     </div>
 );
 

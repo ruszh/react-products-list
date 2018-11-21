@@ -7,34 +7,11 @@ import Alert from '../../components/Alert';
 import { createAction } from '../../utilities';
 import { SIGNIN, SIGNUP } from '../../constants';
 
-import './Authentification.css';
 
 class Authentification extends Component {
     state = {
         signupMode: false
     }
-
-    // showAlert = (type, message) => {
-    //     if(type === 'error') {
-    //         this.setState({
-    //             errorMessage: message
-    //         });
-    //         setTimeout(() => {
-    //             this.setState({
-    //                 errorMessage: ''
-    //             })
-    //         }, 3000);
-    //         return;
-    //     }
-    //     this.setState({
-    //         message: message
-    //     });
-    //     setTimeout(() => {
-    //         this.setState({
-    //             message: ''
-    //         })
-    //     }, 3000);
-    // }
 
     componentDidUpdate = () => {
         console.log('component did update')
@@ -71,17 +48,19 @@ class Authentification extends Component {
     render() {
         const { error, message, formIsValid } = this.props;
         return (
-        <Fragment>
-            <AuthForm
-                submitHandler={this.onSubmitHandler}
-                isValid={ formIsValid ? true : false }
-                signupHandler={this.onSignupHandler}
-                signupToggle={this.signupToggleHandler}
-                signup={this.state.signupMode}
-                />
-            { message && <Alert type='success' message={message} /> }
-            { error &&  <Alert type='danger' message={error} />}
-        </Fragment>
+            <Fragment>
+                    { message && <Alert type='success' message={message} /> }
+                    { error &&  <Alert type='danger' message={error} />}
+                <div className="content-center">
+                    <AuthForm
+                        submitHandler={this.onSubmitHandler}
+                        isValid={ formIsValid ? true : false }
+                        signupHandler={this.onSignupHandler}
+                        signupToggle={this.signupToggleHandler}
+                        signup={this.state.signupMode}
+                        />
+                </div>
+            </Fragment>
         )
     }
 }

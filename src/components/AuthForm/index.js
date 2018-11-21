@@ -29,8 +29,8 @@ const registrationForm = (props) => (
             </div>
             <div className="form-group row">
                     <div className="col">
-                        <button type='submit' className="btn btn-success">Submit</button>
-                        <button onClick={props.signupToggle} className="btn btn-danger">Cancel</button>
+                        <button type='submit' className="btn btn-success">Register</button>
+                        <button onClick={props.signupToggle} className="btn btn-danger">Back</button>
                     </div>
             </div>
         </div>
@@ -58,9 +58,13 @@ const loginForm = (props) => (
             </div>
             <div className="form-group row">
                     <div className="col">
-                        <button onClick={props.signupToggle} className="btn btn-light">Signup</button>
+
                         <button type="submit" className="btn btn-primary">Login</button>
                     </div>
+            </div>
+            <div className="form-group row">
+                <div className='col-form-label' style={{marginLeft: '15px'}}>You are not register?</div>
+                <button onClick={props.signupToggle} className="btn btn-link">Signup</button>
             </div>
         </div>
     </form>

@@ -1,17 +1,15 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { push } from 'connected-react-router';
 
-import './Dashboard.css';
-
-import { sortByName, sortByCheck } from '../../utilities';
+import { sortByName, sortByCheck, createAction } from '../../utilities';
 
 import Preloader from '../../components/Preloader';
 import Header from '../../components/Header';
 import ListContent from '../../components/ListContent';
 import ModalContainer from '../ModalContainer';
 
-import { createAction } from '../../utilities';
 import {
   SELECT_PRODUCT,
   SELECT_SHOP,
@@ -172,13 +170,15 @@ class Dashboard extends Component {
     }
 
   render() {
-    const { isLoading } = this.props;
+    const { isLoading, push } = this.props;
     return (
       <Fragment>
           {   !isLoading ?
               <Fragment>
                 <ModalContainer selectedItems={this.selectedItems}/>
-                <Header email={this.props.email} logout={this.props.logoutAction}/>
+                <Header
+                    email={this.props.email} logout={this.props.logoutAction}
+                    route={push}/>
                 <div className='row'>
                     <ListContent
                         title='Shops list'
@@ -206,7 +206,6 @@ class Dashboard extends Component {
 }
 
 Dashboard.propTypes = {
-
     isLoading: PropTypes.bool.isRequired,
     selectShopAction: PropTypes.func.isRequired,
     selectProductAction: PropTypes.func.isRequired,
@@ -244,5 +243,6 @@ export default connect(mapStateToProps, {
 
     openModalAction: createAction(OPEN_MODAL),
 
-    logoutAction: createAction(LOGOUT.request)
+    logoutAction: createAction(LOGOUT.request),
+    push
 })(Dashboard);

@@ -9,6 +9,7 @@ export default class Pagination extends Component {
 
     selectPage = (e) => {
         const value = Number(e.target.dataset.page);
+        if(value === this.props.current ) return;
         this.props.selectPageHandler(value);
     }
     nextPage = () => {

@@ -21,7 +21,7 @@ const LoadModal = (props) => (
             }
 
             <div className='modal-container'>
-                <ul className='list-group saved-list' style={{ height: '260px' }}>
+                <ul className='list-group saved-list' style={{ minHeight: '260px' }}>
                     { props.listsArr &&
                         props.listsArr.map(el => {
                                 const date = new Date(el.date).toString();
@@ -41,9 +41,7 @@ const LoadModal = (props) => (
                 </ul>
             </div>
             <div className='modal-container'>
-                { props.pages > 0 &&
-                    <Pagination pages={props.pages} current={props.current} selectPageHandler={props.loadLists} />
-                }
+                <Pagination pages={props.pages} current={props.current} selectPageHandler={props.loadLists} />
             </div>
             <div className='modal-container'>
                 <button className='btn' onClick={props.closeModal}>Close</button>
