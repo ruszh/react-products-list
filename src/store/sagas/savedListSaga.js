@@ -1,11 +1,25 @@
 import SavedListService from '../../services/SavedListService';
 import { put, call, select, takeEvery } from 'redux-saga/effects';
-import { LOAD_LIST, SAVE_LIST, GET_LIST } from '../../constants';
+import { LOAD_LIST, SAVE_LIST, GET_LIST, DELETE_LIST } from '../../constants';
 import { createAction } from '../../utilities';
 
 function* loadLists(action) {
+    let option;
+    if(!action.payload) {
+        const store = yield select();
+        const userId = store.auth.user._id;
+        const { current, sort } = store.savedList;
+        option = {
+            userId,
+            page: current,
+            sort
+        };
+    } else {
+        option = action.payload;
+    }
+
     try {
-        const result = yield call(SavedListService.loadLists, action.payload);
+        const result = yield call(SavedListService.loadLists, option);
         if(result.error) {
             yield put(createAction(LOAD_LIST.error)(result.error))
             return;
@@ -61,9 +75,21 @@ function* getList(action) {
         yield put(createAction(GET_LIST.error)(err))
     }
 }
+
+function* deleteList(action) {
+    try {
+        const result = yield call(SavedListService.deleteList, action.payload);
+        yield put(createAction(DELETE_LIST.success)(result.success));
+        return yield put(createAction(LOAD_LIST.request)())
+    } catch (err) {
+        yield put(createAction(DELETE_LIST.error)(err))
+    }
+}
+
 export function* watchSavedList() {
     yield takeEvery(LOAD_LIST.request, loadLists);
     yield takeEvery(SAVE_LIST.request, saveList);
     yield takeEvery(GET_LIST.request, getList);
+    yield takeEvery(DELETE_LIST.request, deleteList);
 }
 

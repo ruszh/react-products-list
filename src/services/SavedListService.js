@@ -44,6 +44,23 @@ class SavedListService {
         }
         return new Error('List not found');
     }
+    async deleteList(listId) {
+        const options = {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                listId
+            })
+        }
+        const result = await fetch(`${CONFIG.url}list/delete`, options);
+        if(result.statusText === 'OK') {
+            return result.json();
+        }
+
+        return new Error('Something go wrong');
+    }
 
 }
 

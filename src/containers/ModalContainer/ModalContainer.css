@@ -4,13 +4,13 @@
 .modal-body {
     min-width: 500px;
 }
-
 .date {
     float: right;
     font-size: 1em;
     color: #0062cc;
     opacity: .8;
     pointer-events: none;
+    transition-duration: .5s;
 }
 .saved-list li {
     cursor: pointer;
@@ -21,6 +21,23 @@
     color: white;
 }
 
-.saved-list li:hover span {
+.saved-list li:hover .date {
     color: white;
+    margin-right: 15px;
+}
+.saved-list li:hover .delete {
+    right: 10px;
+    opacity: 1;
+    transition-duration: .5s;
+}
+.delete {
+    float: right;
+    position: absolute;
+    top: 10px;
+    right: 0;
+    opacity: 0;
+    transition-duration: .3s;
+}
+.delete img {
+    width: 20px;
 }

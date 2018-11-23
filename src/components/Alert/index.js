@@ -10,7 +10,7 @@ const Alert = (props) => (
     </div>
 );
 
-Alert.ptoptypes = {
+Alert.propTypes = {
     type: PropTypes.string.isRequired,
     message: PropTypes.string.isRequired
 }

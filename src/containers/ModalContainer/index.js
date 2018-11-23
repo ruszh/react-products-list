@@ -8,7 +8,7 @@ import './ModalContainer.css';
 
 import { connect } from 'react-redux';
 import { createAction } from '../../utilities';
-import { GET_LIST, LOAD_LIST, SAVE_LIST, CLOSE_MODAL } from '../../constants';
+import { GET_LIST, LOAD_LIST, SAVE_LIST, CLOSE_MODAL, DELETE_LIST } from '../../constants';
 
 class ModalContainer extends Component {
     saveListHandler = (e) => {
@@ -35,14 +35,24 @@ class ModalContainer extends Component {
     }
 
     loadListHandler = (page, sort) => {
-      const { userId } = this.props;
-      const option = { userId, page, sort: !sort ? this.props.sort : sort };
-      this.props.loadListsAction(option);
+        if(page) {
+          const { userId } = this.props;
+          const option = {
+              userId,
+              page: !page ? this.props.current : page,
+              sort: !sort ? this.props.sort : sort };
+          return this.props.loadListsAction(option);
+        }
+        this.props.loadListsAction();
     }
 
     selectHandler = (e) => {
       this.props.getListAction(e.target.dataset.id);
       this.props.closeModalAction();
+    }
+    deleteHandler = (e) => {
+        e.stopPropagation();
+        this.props.deleteListAction(e.target.dataset.id);
     }
 
     get modalBody() {
@@ -62,7 +72,8 @@ class ModalContainer extends Component {
                             pages={pages}
                             current={current}
                             sortHandler={this.sortHandler}
-                            sort={this.props.sort}/>
+                            sort={this.props.sort}
+                            deleteHandler={this.deleteHandler}/>
           default:
               return null;
       }
@@ -106,5 +117,6 @@ export default connect(mapStateToProps, {
   closeModalAction: createAction(CLOSE_MODAL),
   saveListAction: createAction(SAVE_LIST.request),
   getListAction: createAction(GET_LIST.request),
-  loadListsAction: createAction(LOAD_LIST.request)
+  loadListsAction: createAction(LOAD_LIST.request),
+  deleteListAction: createAction(DELETE_LIST.request)
 })(ModalContainer);

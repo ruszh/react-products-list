@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 import './Pagination.css';
 import { generateSequence } from '../../utilities';
 
-//props: pages, current, selectPageHandler
-
 export default class Pagination extends Component {
 
     selectPage = (e) => {
@@ -47,7 +45,7 @@ export default class Pagination extends Component {
             <ul className='pagination'>
                 { pages > 1 &&
                     <li style={{width: '64px'}} className={ current > 1 ? "" : "disabled"} onClick={this.prevPage}>prev</li> }
-                { current > 3 && pages > 5 &&
+                { current > 3 && pages > 6 &&
                     <li onClick={this.selectPage} data-page='1'>...</li> }
                 { this.pages.map(el => (
                     <li

@@ -13,10 +13,6 @@ class Authentification extends Component {
         signupMode: false
     }
 
-    componentDidUpdate = () => {
-        console.log('component did update')
-    }
-
     onSignupHandler = async (e) => {
         e.preventDefault();
         const form = e.target;
@@ -50,7 +46,7 @@ class Authentification extends Component {
         return (
             <Fragment>
                     { message && <Alert type='success' message={message} /> }
-                    { error &&  <Alert type='danger' message={error} />}
+                    { error &&  <Alert type='danger' message={error} /> }
                 <div className="content-center">
                     <AuthForm
                         submitHandler={this.onSubmitHandler}
@@ -69,8 +65,7 @@ Authentification.propTypes = {
     signinAction: PropTypes.func.isRequired,
     error: PropTypes.string,
     message: PropTypes.string,
-    signupAction: PropTypes.func.isRequired,
-
+    signupAction: PropTypes.func.isRequired
 }
 
 const mapStateToProps = (state) => {

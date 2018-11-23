@@ -1,6 +1,5 @@
+//@flow
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-
 import Dashboard from '../Dashboard';
 import Authentication from '../Authentification';
 import Preloader from '../../components/Preloader';
@@ -13,7 +12,15 @@ import { ConnectedRouter, push } from 'connected-react-router';
 import { createAction } from '../../utilities';
 import { VERIFICATION } from '../../constants';
 
-class App extends Component {
+type Props = {
+  auth: { login: boolean, user: Object },
+  isLoading: boolean,
+  history: Object,
+  verifyAction: (payload?: any) => any,
+  push: () => void
+}
+
+class App extends Component<Props> {
   componentWillMount() {
     this.props.verifyAction();
   }
@@ -25,8 +32,9 @@ class App extends Component {
       <ConnectedRouter history={history}>
           <div className="App container">
               { isLoading && <Preloader /> }
-              { auth.login ? <Redirect to='/dashboard' /> : <Redirect to='/' />}
+              { !isLoading && !auth.login && <Redirect to='/' /> }
                 <Switch>
+                    { !isLoading && auth.login && <Redirect exact from='/' to='/dashboard' /> }
                     <Route exact path='/' render={() => <Authentication />} />
                     <Route path='/dashboard' render={() => <Dashboard />} />
                     <Route path='/user' render={() => <User user={auth.user} route={push}/>} />
@@ -44,10 +52,6 @@ const mapStateToProps = (store) => {
   }
 }
 
-App.propTypes = {
-  verifyAction: PropTypes.func.isRequired,
-  auth: PropTypes.object.isRequired
-}
 
 export default connect(mapStateToProps, {
   verifyAction: createAction(VERIFICATION.request),

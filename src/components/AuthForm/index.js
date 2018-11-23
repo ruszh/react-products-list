@@ -74,7 +74,7 @@ const AuthForm = (props) => (
     <div className='form-container'>
         { props.signup ? registrationForm(props) : loginForm(props) }
     </div>
-)
+);
 
 AuthForm.propTypes = {
     submitHandler: PropTypes.func.isRequired,

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import SearchResult from '../../components/SearchResult';
-import { debounce } from 'lodash';
+import debounce from 'lodash/debounce';
 import './Search.css';
 
 export default class Search extends Component {
@@ -28,7 +28,7 @@ export default class Search extends Component {
   search = (query) => {
     if(!query) return;
     const itemsArr = this.props.items;
-    const searchResult = itemsArr.filter(el => el.name.toLowerCase().indexOf(query) !== -1);
+    const searchResult = itemsArr.filter(el => el.name.toLowerCase().indexOf(query) === 0);
 
     if(searchResult.length) {
       this.setState({
@@ -42,8 +42,6 @@ export default class Search extends Component {
     this.setState({
         inputValue: value
     });
-    //const value = e.target.value;
-    //if(!value) return;
     const query = value.toLowerCase();
     this.search(query);
   }, 1000, { leading: false, trailing: true });

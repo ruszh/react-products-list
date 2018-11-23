@@ -156,13 +156,7 @@ class Dashboard extends Component {
 
   openModalHandler = (name) => {
       if(name === 'load') {
-        const { userId, sort } = this.props;
-        const option = {
-            userId,
-            page: 1,
-            sort
-        }
-        this.props.loadListsAction(option);
+        this.props.loadListsAction();
         this.props.openModalAction('load');
       } else if(name === 'save'){
         this.props.openModalAction('save');

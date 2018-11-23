@@ -1,4 +1,4 @@
-import { LOAD_LIST, SAVE_LIST } from '../constants';
+import { LOAD_LIST, SAVE_LIST, DELETE_LIST } from '../constants';
 
 const initState = {
     error: '',
@@ -33,6 +33,18 @@ export function savedListReducer(state = initState, action) {
             return {
                 ...state,
                 error: action.payload
+            }
+        case DELETE_LIST.success:
+            return {
+                ...state,
+                error: '',
+                success: action.payload
+            }
+        case DELETE_LIST.error:
+            return {
+                ...state,
+                error: action.payload,
+                success: ''
             }
         default:
             return state;
