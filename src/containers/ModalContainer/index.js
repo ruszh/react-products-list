@@ -52,7 +52,7 @@ class ModalContainer extends Component {
     }
     deleteHandler = (e) => {
         e.stopPropagation();
-        this.props.deleteListAction(e.target.dataset.id);
+        this.props.deleteListAction(e.currentTarget.dataset.id);
     }
 
     get modalBody() {

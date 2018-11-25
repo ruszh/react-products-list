@@ -1,5 +1,5 @@
+//@flow
 import React, { Component, Fragment } from 'react';
-import PropTypes from 'prop-types';
 import AuthForm from '../../components/AuthForm';
 import { connect } from 'react-redux';
 import Alert from '../../components/Alert';
@@ -7,13 +7,24 @@ import Alert from '../../components/Alert';
 import { createAction } from '../../utilities';
 import { SIGNIN, SIGNUP } from '../../constants';
 
+type Props = {
+    error: string,
+    message: string,
+    formIsValid: boolean,
+    signupAction: (user: Object) => void,
+    signinAction: ({ email: string, password: string }) => void
 
-class Authentification extends Component {
+}
+type State = {
+    signupMode: boolean
+}
+
+class Authentification extends Component<Props, State> {
     state = {
         signupMode: false
     }
 
-    onSignupHandler = async (e) => {
+    onSignupHandler = async (e: SyntheticEvent<>) => {
         e.preventDefault();
         const form = e.target;
         const user = {
@@ -31,7 +42,7 @@ class Authentification extends Component {
         })
     }
 
-    onSubmitHandler = (e) => {
+    onSubmitHandler = (e: SyntheticEvent<>) => {
         e.preventDefault();
         const form = e.target;
 
@@ -59,13 +70,6 @@ class Authentification extends Component {
             </Fragment>
         )
     }
-}
-
-Authentification.propTypes = {
-    signinAction: PropTypes.func.isRequired,
-    error: PropTypes.string,
-    message: PropTypes.string,
-    signupAction: PropTypes.func.isRequired
 }
 
 const mapStateToProps = (state) => {

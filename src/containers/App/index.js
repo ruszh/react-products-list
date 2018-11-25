@@ -16,7 +16,7 @@ type Props = {
   auth: { login: boolean, user: Object },
   isLoading: boolean,
   history: Object,
-  verifyAction: (payload?: any) => any,
+  verifyAction: () => any,
   push: () => void
 }
 
@@ -45,7 +45,7 @@ class App extends Component<Props> {
   }
 }
 
-const mapStateToProps = (store) => {
+const mapStateToProps = (store: { auth: { isLoading: boolean} }): {} => {
   return {
     auth: store.auth,
     isLoading: store.auth.isLoading
