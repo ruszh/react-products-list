@@ -19,6 +19,7 @@
   },
   "scripts": {
     "flow": "flow",
+    "flow:watch": "flow-watch",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -34,6 +35,7 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "flow-bin": "^0.86.0"
+    "flow-bin": "^0.86.0",
+    "flow-watch": "^1.1.3"
   }
 }

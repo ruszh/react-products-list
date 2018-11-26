@@ -1,5 +1,5 @@
+//@flow
 import React, { Component, Fragment } from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 
@@ -20,7 +20,37 @@ import {
   LOAD_LIST,
   LOGOUT } from '../../constants';
 
-class Dashboard extends Component {
+type Item = {
+  name: string,
+  id: number,
+  selected: boolean,
+  active: boolean,
+  productsids?: Array<number> };
+
+type Action = (payload?: any) => Object;
+type Lists = { shops: Item[] , products: Array<Item>};
+
+
+type Props = {
+  isLoading: boolean,
+  lists: Lists,
+  error: string,
+  email: string,
+  modal: { modalIsOpen: boolean, name?: any },
+  userId: string,
+  sort: string,
+  dataRequest: Action,
+  selectProductAction: Action,
+  selectShopAction: Action,
+  checkShopsAction: Action,
+  checkProductsAction: Action,
+  loadListsAction: Action,
+  openModalAction: Action,
+  logoutAction: Action,
+  push: () => any
+}
+
+class Dashboard extends Component<Props> {
 
   componentWillMount = () => {
     this.props.dataRequest();
@@ -35,8 +65,8 @@ class Dashboard extends Component {
   }
 
   get selectedItems() {
-    const allItems = this.props.lists;
-    const getFilteredResult = arr => arr.filter(el => el.selected).map(el => el.id)
+    const allItems: Lists = this.props.lists;
+    const getFilteredResult = (arr: Array<Item>): Array<number> => arr.filter(el => el.selected).map(el => el.id)
     return {
       shops: getFilteredResult(allItems.shops),
       products: getFilteredResult(allItems.products)
@@ -44,19 +74,22 @@ class Dashboard extends Component {
   }
 
   checkShopsHandler = () => {
-    const switchCheckedStatus = () => {
+    const switchCheckedStatus = (): string => {
       return this.props.lists.shops.every(el => el.selected) ? "uncheck" : "check"
     }
     this.props.checkShopsAction(switchCheckedStatus())
   }
 
   checkProductsHandler = () => {
-    const selectedShops = this.selectedItems.shops;
+    const selectedShops: Array<number> = this.selectedItems.shops;
 
     if(selectedShops.length) {
-      const productsByShops = this.productsStatusForSelectedShops;
-      const allProductsByShops = [...productsByShops.selectedProducts, ...productsByShops.notSelectedProducts]
-      const switchCheckedStatus = () => allProductsByShops.every(el => el.selected) ? "uncheck" : "check"
+      const productsByShops: {
+        selectedProducts: Array<Item>,
+        notSelectedProducts: Array<Item>
+      } = this.productsStatusForSelectedShops;
+      const allProductsByShops: Array<Item>  = [...productsByShops.selectedProducts, ...productsByShops.notSelectedProducts]
+      const switchCheckedStatus = (): string => allProductsByShops.every(el => el.selected) ? "uncheck" : "check"
 
       return this.props.checkProductsAction({
         option: switchCheckedStatus(),
@@ -65,24 +98,28 @@ class Dashboard extends Component {
 
     }
 
-    const allProducts = this.props.lists.products;
-    const switchCheckedStatus = () => allProducts.every(el => el.selected) ? 'uncheck-all' : 'check-all';
+    const allProducts: Array<Item> = this.props.lists.products;
+    const switchCheckedStatus = (): string => allProducts.every(el => el.selected) ? 'uncheck-all' : 'check-all';
 
     this.props.checkProductsAction({ option: switchCheckedStatus() })
   }
 
-  get productsStatusForSelectedShops() {
+  get productsStatusForSelectedShops(): {
+    selectedProducts: Array<Item>,
+    notSelectedProducts: Array<Item>
+  } {
 
-    const shops = this.props.lists.shops;
-    const allProducts = this.props.lists.products.sort(sortByName);
-    const selectedShops = shops.filter(el => el.selected);
+    const shops: Array<Item> = this.props.lists.shops;
+    const allProducts: Array<Item> = this.props.lists.products.sort(sortByName);
+    const selectedShops: Array<Item> = shops.filter(el => el.selected);
 
     //--------------filter----------------------
 
-    return allProducts.reduce((acc, product) => {
-      const currentProduct = {...product};
-      const shopsContainsProduct = selectedShops.some(shop => shop.productsids.indexOf(currentProduct.id) !== -1);
-      const resultContainsProduct = acc.selectedProducts.some(el => el.id === currentProduct.id)
+    return allProducts.reduce((acc: Object, product: Object) => {
+      const currentProduct: Item = {...product};
+      // $FlowFixMe
+      const shopsContainsProduct: boolean = selectedShops.some((shop: Item) => shop.productsids.some(id => id === currentProduct.id));
+      const resultContainsProduct: boolean = acc.selectedProducts.some((el: Item) => el.id === currentProduct.id)
 
       if(shopsContainsProduct) {
           currentProduct.active = true;
@@ -104,20 +141,21 @@ class Dashboard extends Component {
   }
 
   get filteredProducts() {
-    const shops = this.props.lists.shops;
-    const isSomeShopSelected = shops.some(el => el.selected)
+    const shops: Array<Item> = this.props.lists.shops;
+    const isSomeShopSelected: boolean = shops.some(el => el.selected)
 
     if(isSomeShopSelected) {
       const { selectedProducts, notSelectedProducts } = this.productsStatusForSelectedShops
       return [...selectedProducts, ...notSelectedProducts];
     }
 //-------------------------------------------------
-    const allActiveProducts = this.props.lists.products.map(product => {
-      const currentProduct = {...product};
+    const allActiveProducts: Array<Item> = this.props.lists.products.map(product => {
+      const currentProduct: Item = {...product};
       currentProduct.active = true
       return currentProduct;
     });
-    const separatedProducts = allActiveProducts.reduce((acc, product) => {
+    const separatedProducts = allActiveProducts.reduce(
+      (acc: { selected: Array<Item>, notSelected: Array<Item> }, product) => {
       if(product.selected) {
         acc.selected.push(product);
         return acc;
@@ -130,18 +168,19 @@ class Dashboard extends Component {
     return [...separatedProducts.selected.sort(sortByName), ...separatedProducts.notSelected.sort(sortByName)];
   }
 
-  get filteredShops() {
-    const selectedProductsIds = this.props.lists.products.filter(el => el.selected).map(el => el.id);
-    const shops = this.props.lists.shops.sort(sortByName).map(shop => {
-      const currentShop = {...shop};
+  get filteredShops(): Item[] {
+    const selectedProductsIds: number[] = this.props.lists.products.filter((el: Item) => el.selected).map(el => el.id);
+    const shops: Item[] = this.props.lists.shops.sort(sortByName).map((shop: Item) => {
+      const currentShop: Item = {...shop};
       currentShop.active = true
       return currentShop
     });
 
     if(selectedProductsIds.length) {
       return shops.map(shop => {
-        const currentShop = { ...shop }
-        const currentShopContainsSelectedProducts = selectedProductsIds.every(prod => shop.productsids.indexOf(prod) !== -1);
+        const currentShop: Item = { ...shop }
+        //$FlowFixMe
+        const currentShopContainsSelectedProducts: boolean = selectedProductsIds.every((prod: number) => shop.productsids.indexOf(prod) !== -1);
 
         if(currentShopContainsSelectedProducts) {
           currentShop.active = true;
@@ -154,7 +193,7 @@ class Dashboard extends Component {
     return shops.sort(sortByCheck);
   }
 
-  openModalHandler = (name) => {
+  openModalHandler = (name: string) => {
       if(name === 'load') {
         this.props.loadListsAction();
         this.props.openModalAction('load');
@@ -197,19 +236,6 @@ class Dashboard extends Component {
       </Fragment>
     )
   }
-}
-
-Dashboard.propTypes = {
-    isLoading: PropTypes.bool.isRequired,
-    selectShopAction: PropTypes.func.isRequired,
-    selectProductAction: PropTypes.func.isRequired,
-    checkShopsAction: PropTypes.func.isRequired,
-    checkProductsAction: PropTypes.func.isRequired,
-    loadListsAction: PropTypes.func.isRequired,
-    logoutAction: PropTypes.func.isRequired,
-    email: PropTypes.string.isRequired,
-    error: PropTypes.string.isRequired,
-    //lists: PropTypes.object
 }
 
 const mapStateToProps = (state) => {

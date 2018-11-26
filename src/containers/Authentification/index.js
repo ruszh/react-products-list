@@ -11,47 +11,12 @@ type Props = {
     error: string,
     message: string,
     formIsValid: boolean,
-    signupAction: (user: Object) => void,
+    signupAction: ({ email: string, password: string, name: string }) => void,
     signinAction: ({ email: string, password: string }) => void
 
 }
-type State = {
-    signupMode: boolean
-}
 
-class Authentification extends Component<Props, State> {
-    state = {
-        signupMode: false
-    }
-
-    onSignupHandler = async (e: SyntheticEvent<>) => {
-        e.preventDefault();
-        const form = e.target;
-        const user = {
-            email: form.elements['email'].value.toLowerCase(),
-            name: form.elements['name'].value,
-            password: form.elements['password'].value
-        }
-
-        this.props.signupAction(user);
-    }
-
-    signupToggleHandler = () => {
-        this.setState({
-            signupMode: !this.state.signupMode
-        })
-    }
-
-    onSubmitHandler = (e: SyntheticEvent<>) => {
-        e.preventDefault();
-        const form = e.target;
-
-        const email = form.elements['email'].value.toLowerCase();
-        const password = form.elements['password'].value.toLowerCase();
-
-        this.props.signinAction({ email, password });
-    }
-
+class Authentification extends Component<Props> {
     render() {
         const { error, message, formIsValid } = this.props;
         return (
@@ -60,11 +25,9 @@ class Authentification extends Component<Props, State> {
                     { error &&  <Alert type='danger' message={error} /> }
                 <div className="content-center">
                     <AuthForm
-                        submitHandler={this.onSubmitHandler}
+                        signin={this.props.signinAction}
                         isValid={ formIsValid ? true : false }
-                        signupHandler={this.onSignupHandler}
-                        signupToggle={this.signupToggleHandler}
-                        signup={this.state.signupMode}
+                        signup={this.props.signupAction}
                         />
                 </div>
             </Fragment>
