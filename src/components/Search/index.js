@@ -1,75 +1,86 @@
+//@flow
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import SearchResult from '../../components/SearchResult';
 import debounce from 'lodash/debounce';
 import './Search.css';
+import type { ListItem } from '../../containers/Dashboard/types';
 
-export default class Search extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      showSearchResult: false,
-      searchResult: [],
-      inputValue: ''
-    };
-  }
+type Props = {
+    items: ListItem[],
+    selectHandler: (e: Object) => any
+};
 
+type State = {
+    showSearchResult: boolean,
+    searchResult: Array<any>,
+    inputValue: string
+};
 
-  hideSearchResult = () => {
-    setTimeout(() => {
-      this.setState({
+export default class Search extends Component<Props, State> {
+    state = {
         showSearchResult: false,
-        searchResult: []
-      });
-    }, 200);
-    this.setState({ inputValue: ''})
-  }
+        searchResult: [],
+        inputValue: ''
+    };
 
-  search = (query) => {
-    if(!query) return;
-    const itemsArr = this.props.items;
-    const searchResult = itemsArr.filter(el => el.name.toLowerCase().indexOf(query) === 0);
+    hideSearchResult = () => {
+        setTimeout(() => {
+            this.setState({
+                showSearchResult: false,
+                searchResult: []
+            });
+        }, 200);
+        this.setState({ inputValue: '' });
+    };
 
-    if(searchResult.length) {
-      this.setState({
-        showSearchResult: true,
-        searchResult
-      })
+    search = (query: string) => {
+        if (!query) return;
+        const itemsArr: ListItem[] = this.props.items;
+        const searchResult: ListItem[] = itemsArr.filter(
+            el => el.name.toLowerCase().indexOf(query) === 0
+        );
+
+        if (searchResult.length) {
+            this.setState({
+                showSearchResult: true,
+                searchResult
+            });
+        }
+    };
+
+    onSearchHandler = debounce(
+        (value: string) => {
+            this.setState({
+                inputValue: value
+            });
+            const query: string = value.toLowerCase();
+            this.search(query);
+        },
+        1000,
+        { leading: false, trailing: true }
+    );
+
+    render() {
+        return (
+            <div className='search-container'>
+                <input
+                    type='text'
+                    className='form-control search-input'
+                    placeholder='Search'
+                    onChange={(e: SyntheticInputEvent<> ) => {
+                        this.setState({ inputValue: e.target.value });
+                        this.onSearchHandler(e.target.value);
+                    }}
+                    value={this.state.inputValue}
+                    onBlur={this.hideSearchResult}
+                />
+                {this.state.showSearchResult && (
+                    <SearchResult
+                        items={this.state.searchResult}
+                        selectHandler={this.props.selectHandler}
+                    />
+                )}
+            </div>
+        );
     }
-  }
-
-  onSearchHandler = debounce((value) => {
-    this.setState({
-        inputValue: value
-    });
-    const query = value.toLowerCase();
-    this.search(query);
-  }, 1000, { leading: false, trailing: true });
-
-  render() {
-    return (
-      <div className="search-container">
-          <input
-              type='text'
-              className='form-control search-input'
-              placeholder='Search'
-              onChange={(e) => {
-                this.setState({inputValue: e.target.value})
-                this.onSearchHandler(e.target.value)
-              }}
-              value={this.state.inputValue}
-              onBlur={this.hideSearchResult} />
-          { this.state.showSearchResult &&
-              <SearchResult
-                  items={this.state.searchResult}
-                  selectHandler={this.props.selectHandler}/>
-          }
-      </div>
-    )
-  }
-}
-
-Search.propTypes = {
-  items: PropTypes.array.isRequired,
-  selectHandler: PropTypes.func.isRequired
 }

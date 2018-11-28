@@ -1,8 +1,14 @@
+//@flow
 import React from 'react';
-import PropTypes from 'prop-types';
 import './Header.css';
 
-const Header = (props) => (
+type Props = {
+    logout: Function,
+    email: string,
+    route: Function
+}
+
+const Header = (props: Props) => (
     <div className='row header'>
         <div style={{width: '100%'}}>
             <button className='btn' onClick={props.logout}>logout</button>
@@ -11,11 +17,6 @@ const Header = (props) => (
         </div>
     </div>
 );
-
-Header.propTypes = {
-    email: PropTypes.string.isRequired,
-    logout: PropTypes.func.isRequired
-}
 
 export default Header;
 

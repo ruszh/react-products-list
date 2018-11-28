@@ -1,20 +1,21 @@
+//@flow
 import React from 'react';
-import PropTypes from 'prop-types';
 import './SearchResult.css';
+import type { ListItem } from '../../containers/Dashboard/types';
 
-const SearchResult = (props) => (
-      <ul className='search-result-container' onClick={props.selectHandler}>
-          {
-            props.items.map(item => (
-            <li className='search-result-item' key={item.id} value={item.id}>{item.name}</li>
-            ))
-          }
-      </ul>
+type Props = {
+    selectHandler: (e: Object) => void,
+    items: ListItem[]
+};
+
+const SearchResult = (props: Props) => (
+    <ul className='search-result-container' onClick={props.selectHandler}>
+        {props.items.map((item: ListItem)=> (
+            <li className='search-result-item' key={item.id} value={item.id}>
+                {item.name}
+            </li>
+        ))}
+    </ul>
 );
-
-SearchResult.propTypes = {
-  items: PropTypes.array.isRequired,
-  selectHandler: PropTypes.func.isRequired
-}
 
 export default SearchResult;

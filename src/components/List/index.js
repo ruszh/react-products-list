@@ -1,31 +1,39 @@
+//@flow
 import React from 'react';
-import PropTypes from 'prop-types';
 import './List.css';
+import type { ListItem } from '../../containers/Dashboard/types';
 
-const List = (props) => (
-      <div>
+type Props = {
+    //$FlowFixMe
+    items: ListItem[],
+    selectHandler: (e: Object) => void
+};
+
+const List = (props: Props) => (
+    <div>
         <ul className='list-group item-list'>
-          { props.items.map(el => (
-                  <li
-                      className={el.active ? 'list-group-item' : 'list-group-item not-active'}
-                      key={el.id}>
+            {props.items.map(el => (
+                <li
+                    className={
+                        el.active
+                            ? 'list-group-item'
+                            : 'list-group-item not-active'
+                    }
+                    key={el.id}>
                     <div className='checkbox-container'>
-                      <input
-                          type='checkbox'
-                          className='checkbox'
-                          checked={ el.selected }
-                          value={ el.id }
-                          onChange={props.selectHandler}/>
+                        <input
+                            type='checkbox'
+                            className='checkbox'
+                            checked={el.selected}
+                            value={el.id}
+                            onChange={props.selectHandler}
+                        />
                     </div>
                     {el.name}
-                  </li>
-                ))}
+                </li>
+            ))}
         </ul>
-      </div>
-    );
-
-List.propTypes = {
-  items: PropTypes.array.isRequired
-}
+    </div>
+);
 
 export default List;

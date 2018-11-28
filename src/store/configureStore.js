@@ -6,20 +6,23 @@ import logger from 'redux-logger';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { createBrowserHistory } from 'history';
 import { routerMiddleware } from 'connected-react-router';
+import { createEpicMiddleware } from 'redux-observable';
 
 const sagaMiddleware = createSagaMiddleware();
 export const history = createBrowserHistory();
 
-export const store = createStore(
-  rootReducer(history),
-  composeWithDevTools(
-    applyMiddleware(
-      logger,
-      sagaMiddleware,
-      routerMiddleware(history)
-      )
-  )
-);
+const epicMiddleware = createEpicMiddleware();
 
+export const store = createStore(
+    rootReducer(history),
+    composeWithDevTools(
+        applyMiddleware(
+            logger,
+            sagaMiddleware,
+            epicMiddleware,
+            routerMiddleware(history)
+        )
+    )
+);
 
 sagaMiddleware.run(rootSaga);

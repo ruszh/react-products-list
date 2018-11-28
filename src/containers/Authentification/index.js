@@ -13,38 +13,39 @@ type Props = {
     formIsValid: boolean,
     signupAction: ({ email: string, password: string, name: string }) => void,
     signinAction: ({ email: string, password: string }) => void
-
-}
+};
 
 class Authentification extends Component<Props> {
     render() {
         const { error, message, formIsValid } = this.props;
         return (
             <Fragment>
-                    { message && <Alert type='success' message={message} /> }
-                    { error &&  <Alert type='danger' message={error} /> }
-                <div className="content-center">
+                {message && <Alert type='success' message={message} />}
+                {error && <Alert type='danger' message={error} />}
+                <div className='content-center'>
                     <AuthForm
                         signin={this.props.signinAction}
-                        isValid={ formIsValid ? true : false }
+                        isValid={formIsValid ? true : false}
                         signup={this.props.signupAction}
-                        />
+                    />
                 </div>
             </Fragment>
-        )
+        );
     }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
     return {
         error: state.auth.error,
         message: state.auth.message,
         formIsValid: state.auth.formIsValid
+    };
+};
+
+export default connect(
+    mapStateToProps,
+    {
+        signinAction: createAction(SIGNIN.request),
+        signupAction: createAction(SIGNUP.request)
     }
-}
-
-
-export default connect(mapStateToProps, {
-    signinAction: createAction(SIGNIN.request),
-    signupAction: createAction(SIGNUP.request),
-})(Authentification);
+)(Authentification);

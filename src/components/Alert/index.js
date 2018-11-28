@@ -1,18 +1,18 @@
+//@flow
 import React from 'react';
-import PropTypes from 'prop-types';
 import './Alert.css';
 
-const Alert = (props) => (
+type Props = {
+    type: string,
+    message: string
+};
+
+const Alert = (props: Props) => (
     <div className='alert-container'>
-        <div className={`alert alert-${props.type}`} role="alert">
+        <div className={`alert alert-${props.type}`} role='alert'>
             {props.message}
         </div>
     </div>
 );
-
-Alert.propTypes = {
-    type: PropTypes.string.isRequired,
-    message: PropTypes.string.isRequired
-}
 
 export default Alert;

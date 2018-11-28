@@ -1,3 +1,4 @@
+//@flow
 import { createConstant } from '../utilities';
 
 
