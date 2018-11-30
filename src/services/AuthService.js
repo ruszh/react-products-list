@@ -18,7 +18,7 @@ class AuthService {
         return await result.json();
     }
 
-    async virification(): Promise<any> {
+    async verification(): Promise<any> {
         const token: string | any = localStorage.getItem('token');
 
         const result = await fetch(`${CONFIG.url}user/verify`, {

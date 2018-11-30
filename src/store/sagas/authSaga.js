@@ -1,4 +1,4 @@
-//@flow
+
 import { delay } from 'redux-saga';
 import { put, call, takeEvery } from 'redux-saga/effects';
 
@@ -13,24 +13,20 @@ import {
 import { createAction } from '../../utilities';
 import AuthService from '../../services/AuthService';
 
-import type { Action } from '../../utilities/types';
-type Result = {
-    success: string,
-    data: { _id: string, email: string, name: string },
-    user: Object,
-    error: any,
-    token: string
-};
+// import type { Action } from '../../utilities/types';
+// type Result = {
+//     success: string,
+//     data: { _id: string, email: string, name: string },
+//     user: Object,
+//     error: any,
+//     token: string
+// };
 
-function* signin(action: Action) {
+function* signin(action) {
     try {
-        const response: Result = yield call(AuthService.signin, action.payload);
+        const response = yield call(AuthService.signin, action.payload);
         if (response.success) {
-            const signinUser: {
-                _id: string,
-                email: string,
-                name: string
-            } = {
+            const signinUser = {
                 _id: response.data._id,
                 email: response.data.email,
                 name: response.data.name
@@ -45,7 +41,7 @@ function* signin(action: Action) {
     }
 }
 
-function* showAlert(option: { type: string, message: string }): Generator<any, any, any> {
+function* showAlert(option) {
     const { type, message } = option;
     if (type === 'success') {
         yield put(createAction(ALERT_SUCCESS)(message));
@@ -58,9 +54,9 @@ function* showAlert(option: { type: string, message: string }): Generator<any, a
     }
 }
 
-function* verify(): Generator<any, any, any> {
+function* verify() {
     try {
-        const response: Result = yield call(AuthService.virification);
+        const response = yield call(AuthService.verification);
         if (response.error) {
             yield put(createAction(VERIFICATION.error)(response.error));
             return yield call(showAlert, {
@@ -74,9 +70,9 @@ function* verify(): Generator<any, any, any> {
     }
 }
 
-function* signup(action: Action): Generator<any, any, any> {
+function* signup(action) {
     try {
-        const result: Result = yield call(AuthService.signup, action.payload);
+        const result= yield call(AuthService.signup, action.payload);
         if (result.success) {
             yield put(createAction(SIGNUP.success)(result.success));
             return yield call(showAlert, {
@@ -96,7 +92,7 @@ function* logout() {
     yield put(createAction(LOGOUT.success)());
 }
 
-export function* watchAuth(): Generator<any, any, any> {
+export function* watchAuth() {
     yield takeEvery(SIGNIN.request, signin);
     yield takeEvery(VERIFICATION.request, verify);
     yield takeEvery(SIGNUP.request, signup);

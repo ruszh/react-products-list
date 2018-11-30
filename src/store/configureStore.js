@@ -7,6 +7,7 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import { createBrowserHistory } from 'history';
 import { routerMiddleware } from 'connected-react-router';
 import { createEpicMiddleware } from 'redux-observable';
+import { rootEpic } from './epic';
 
 const sagaMiddleware = createSagaMiddleware();
 export const history = createBrowserHistory();
@@ -25,4 +26,5 @@ export const store = createStore(
     )
 );
 
+epicMiddleware.run(rootEpic);
 sagaMiddleware.run(rootSaga);

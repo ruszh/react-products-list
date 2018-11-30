@@ -5,7 +5,7 @@ import Authentication from '../Authentification';
 import Preloader from '../../components/Preloader';
 import User from '../../components/User';
 
-import { Route, Redirect, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { ConnectedRouter, push } from 'connected-react-router';
 
@@ -32,11 +32,7 @@ class App extends Component<Props> {
             <ConnectedRouter history={history}>
                 <div className='App container'>
                     {isLoading && <Preloader />}
-                    {!isLoading && !auth.login && <Redirect to='/' />}
                     <Switch>
-                        {!isLoading && auth.login && (
-                            <Redirect exact from='/' to='/dashboard' />
-                        )}
                         <Route
                             exact
                             path='/'

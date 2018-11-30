@@ -1,5 +1,4 @@
-import { combineReducers } from 'redux';
+import { combineEpics } from 'redux-observable';
+import { authEpics } from './authEpic';
 
-export const rootEpic = combineEpics(
-
-);
+export const rootEpic = combineEpics(authEpics);

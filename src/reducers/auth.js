@@ -16,7 +16,7 @@ type State = {
     message: string,
     formIsValid: boolean,
     isLoading: boolean
-}
+};
 
 const initState: State = {
     user: {},
@@ -69,7 +69,7 @@ export function authReducer(state: State = initState, action: Action) {
         case VERIFICATION.error:
             return {
                 ...state,
-                error: action.payload,
+                success: '',
                 user: {},
                 login: false,
                 isLoading: false
@@ -89,6 +89,7 @@ export function authReducer(state: State = initState, action: Action) {
         case SIGNUP.success:
             return {
                 ...state,
+                message: action.payload,
                 error: '',
                 isLoading: false,
                 formIsValid: true
@@ -96,14 +97,21 @@ export function authReducer(state: State = initState, action: Action) {
         case SIGNUP.error:
             return {
                 ...state,
+                error: action.payload,
                 message: '',
                 isLoading: false
             };
-        case ALERT_ERROR:
+        case ALERT_ERROR.request:
             return {
                 ...state,
                 message: '',
                 error: action.payload
+            };
+        case ALERT_ERROR.success:
+            return {
+                ...state,
+                message: '',
+                error: ''
             };
         case ALERT_SUCCESS:
             return {

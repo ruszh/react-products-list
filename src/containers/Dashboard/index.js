@@ -167,7 +167,7 @@ class Dashboard extends Component<Props> {
     get filteredProducts(): ProductItem[] {
         const shops: ShopItem[] = this.props.lists.shops;
         const isSomeShopSelected: boolean = shops.some(
-            (el: ProductItem) => el.selected
+            (el: ShopItem) => el.selected
         );
 
         if (isSomeShopSelected) {
@@ -178,17 +178,17 @@ class Dashboard extends Component<Props> {
             return [...selectedProducts, ...notSelectedProducts];
         }
         //-------------------------------------------------
-        const allActiveProducts: ListItem[] = this.props.lists.products.map(
+        const allActiveProducts: ProductItem[] = this.props.lists.products.map(
             product => {
-                const currentProduct: ListItem = { ...product };
+                const currentProduct: ProductItem = { ...product };
                 currentProduct.active = true;
                 return currentProduct;
             }
         );
         const separatedProducts = allActiveProducts.reduce(
             (
-                acc: { selected: ListItem[], notSelected: ListItem[] },
-                product: ListItem
+                acc: { selected: ProductItem[], notSelected: ProductItem[] },
+                product: ProductItem
             ) => {
                 if (product.selected) {
                     acc.selected.push(product);
@@ -206,7 +206,7 @@ class Dashboard extends Component<Props> {
         ];
     }
 
-    get filteredShops(): ListItem[] {
+    get filteredShops(): ShopItem[] {
         const selectedProductsIds: number[] = this.props.lists.products
             .filter((el: ProductItem) => el.selected)
             .map(el => el.id);
@@ -221,7 +221,7 @@ class Dashboard extends Component<Props> {
         if (selectedProductsIds.length) {
             return shops
                 .map(shop => {
-                    const currentShop: ListItem = { ...shop };
+                    const currentShop: ShopItem = { ...shop };
                     const currentShopContainsSelectedProducts: boolean = selectedProductsIds.every(
                         (prod: number) => shop.productsids.indexOf(prod) !== -1
                     );
@@ -235,6 +235,7 @@ class Dashboard extends Component<Props> {
                 })
                 .sort(sortByCheck);
         }
+        //$FlowFixMe
         return shops.sort(sortByCheck);
     }
 
@@ -270,6 +271,7 @@ class Dashboard extends Component<Props> {
                             <ListContent
                                 title='Products list'
                                 searchItems={this.props.lists.products}
+                                //$FlowFixMe
                                 items={this.filteredProducts}
                                 selectHandler={this.productSelectHandler}
                                 checkHandler={this.checkProductsHandler}

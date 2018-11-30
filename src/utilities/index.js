@@ -1,8 +1,11 @@
 //@flow
 import type { Action, Constant } from './types';
-export const sortByCheck = (a: any, b: any): number =>
+import type { ProductItem, ShopItem } from '../containers/Dashboard/types'
+
+type Item = ProductItem | ShopItem;
+export const sortByCheck = (a: Item, b: Item): number =>
     a.selected === b.selected ? 0 : b.selected ? 1 : -1;
-export const sortByName = (a: any, b: any): number =>
+export const sortByName = (a: Item, b: Item): number =>
     a.name > b.name ? 1 : -1;
 
 export function* generateSequence(end: number): any {
