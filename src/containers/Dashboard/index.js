@@ -10,7 +10,7 @@ import Header from '../../components/Header';
 import ListContent from '../../components/ListContent';
 import ModalContainer from '../ModalContainer';
 
-import type { ProductItem, ShopItem, ListItem, Lists, Action } from './types';
+import type { ProductItem, ShopItem, Lists, Action } from './types';
 import type { State } from '../../store/types';
 import {
     SELECT_PRODUCT,
@@ -271,7 +271,6 @@ class Dashboard extends Component<Props> {
                             <ListContent
                                 title='Products list'
                                 searchItems={this.props.lists.products}
-                                //$FlowFixMe
                                 items={this.filteredProducts}
                                 selectHandler={this.productSelectHandler}
                                 checkHandler={this.checkProductsHandler}

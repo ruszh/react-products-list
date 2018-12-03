@@ -2,26 +2,23 @@
 import React, { Component, Fragment } from 'react';
 import AuthForm from '../../components/AuthForm';
 import { connect } from 'react-redux';
-import Alert from '../../components/Alert';
 
 import { createAction } from '../../utilities';
 import { SIGNIN, SIGNUP } from '../../constants';
 
+import type { State } from '../../store/types';
+
 type Props = {
-    error: string,
-    message: string,
     formIsValid: boolean,
-    signupAction: ({ email: string, password: string, name: string }) => void,
-    signinAction: ({ email: string, password: string }) => void
+    signupAction: () => void,
+    signinAction: () => void
 };
 
 class Authentification extends Component<Props> {
     render() {
-        const { error, message, formIsValid } = this.props;
+        const { formIsValid } = this.props;
         return (
             <Fragment>
-                {message && <Alert type='success' message={message} />}
-                {error && <Alert type='danger' message={error} />}
                 <div className='content-center'>
                     <AuthForm
                         signin={this.props.signinAction}
@@ -34,10 +31,8 @@ class Authentification extends Component<Props> {
     }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state: State) => {
     return {
-        error: state.auth.error,
-        message: state.auth.message,
         formIsValid: state.auth.formIsValid
     };
 };

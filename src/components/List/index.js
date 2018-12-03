@@ -1,11 +1,11 @@
 //@flow
 import React from 'react';
 import './List.css';
-import type { ListItem } from '../../containers/Dashboard/types';
+import type { ListItems } from '../../containers/Dashboard/types';
 
 type Props = {
     //$FlowFixMe
-    items: ListItem[],
+    items: ListItems,
     selectHandler: (e: Object) => void
 };
 

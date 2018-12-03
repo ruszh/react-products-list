@@ -3,9 +3,7 @@ import {
     SIGNIN,
     VERIFICATION,
     SIGNUP,
-    LOGOUT,
-    ALERT_ERROR,
-    ALERT_SUCCESS
+    LOGOUT
 } from '../constants';
 import type { Action } from '../utilities/types';
 
@@ -100,24 +98,6 @@ export function authReducer(state: State = initState, action: Action) {
                 error: action.payload,
                 message: '',
                 isLoading: false
-            };
-        case ALERT_ERROR.request:
-            return {
-                ...state,
-                message: '',
-                error: action.payload
-            };
-        case ALERT_ERROR.success:
-            return {
-                ...state,
-                message: '',
-                error: ''
-            };
-        case ALERT_SUCCESS:
-            return {
-                ...state,
-                message: action.payload,
-                error: ''
             };
         default:
             return state;

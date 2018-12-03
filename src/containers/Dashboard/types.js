@@ -7,6 +7,7 @@ export type ListItem = {|
     productsids?: number[]
 |};
 
+
 export type ProductItem = {|
     name: string,
     id: number,
@@ -23,4 +24,7 @@ export type ShopItem = {|
 |};
 
 export type Action = (payload?: any) => Object;
+//$FlowFixMe
 export type Lists = { shops: ShopItem[], products: ProductItem[] };
+//$FlowFixMe
+export type ListItems = ShopItem[] | ProductItem[];

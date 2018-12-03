@@ -34,11 +34,16 @@ type SavedList = {
     sort: string,
     success: string
 };
+type Alert = {
+    type: string,
+    message: string
+}
 
 export type State = {
     auth: Auth,
     data: Data,
     modal: Modal,
     router: push,
-    savedList: SavedList
+    savedList: SavedList,
+    alert: Alert
 };

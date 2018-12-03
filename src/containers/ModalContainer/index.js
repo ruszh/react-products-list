@@ -73,7 +73,7 @@ class ModalContainer extends Component<Props> {
         this.props.loadListsAction();
     };
 
-    selectHandler = (e: SyntheticEvent<HTMLElement>)=> {
+    selectHandler = (e: SyntheticEvent<HTMLElement>) => {
         this.props.getListAction(e.currentTarget.dataset.id);
         this.props.closeModalAction();
     };
@@ -130,8 +130,6 @@ class ModalContainer extends Component<Props> {
     }
 }
 
-
-
 const mapStateToProps = (state: State) => {
     return {
         modal: state.modal,
@@ -139,7 +137,8 @@ const mapStateToProps = (state: State) => {
         pages: state.savedList.pages,
         current: state.savedList.current,
         savedList: state.savedList,
-        sort: state.savedList.sort
+        sort: state.savedList.sort,
+        alert: state.alert
     };
 };
 

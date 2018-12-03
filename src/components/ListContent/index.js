@@ -3,12 +3,12 @@ import React from 'react';
 import List from '../List';
 import Search from '../Search';
 import CheckAll from '../CheckAll';
-import type { ListItem } from '../../containers/Dashboard/types';
+import type { ListItems } from '../../containers/Dashboard/types';
 
 type Props = {
     title: string,
-    searchItems: ListItem[],
-    items: ListItem[],
+    searchItems: ListItems,
+    items: ListItems,
     selectHandler: (e: Object) => void,
     checkHandler: Function
 };

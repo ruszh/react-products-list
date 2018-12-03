@@ -3,16 +3,16 @@ import React, { Component } from 'react';
 import SearchResult from '../../components/SearchResult';
 import debounce from 'lodash/debounce';
 import './Search.css';
-import type { ListItem } from '../../containers/Dashboard/types';
+import type { ListItems } from '../../containers/Dashboard/types';
 
 type Props = {
-    items: ListItem[],
+    items: ListItems,
     selectHandler: (e: Object) => any
 };
 
 type State = {
     showSearchResult: boolean,
-    searchResult: Array<any>,
+    searchResult: ListItems,
     inputValue: string
 };
 
@@ -35,8 +35,8 @@ export default class Search extends Component<Props, State> {
 
     search = (query: string) => {
         if (!query) return;
-        const itemsArr: ListItem[] = this.props.items;
-        const searchResult: ListItem[] = itemsArr.filter(
+        const itemsArr: ListItems = this.props.items;
+        const searchResult: ListItems = itemsArr.filter(
             el => el.name.toLowerCase().indexOf(query) === 0
         );
 

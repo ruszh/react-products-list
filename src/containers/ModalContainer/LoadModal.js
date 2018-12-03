@@ -2,6 +2,7 @@
 import React from 'react';
 import Pagination from '../../components/Pagination';
 import type { Item } from './types';
+import { convertDate } from '../../utilities';
 
 type Props = {
     sort: string,
@@ -15,7 +16,6 @@ type Props = {
     closeModal: () => { type: string },
     loadLists: (page: number, sort?: string) => void
 };
-
 
 const LoadModal = (props: Props) => (
     <div className='modal-body'>
@@ -44,7 +44,7 @@ const LoadModal = (props: Props) => (
                 style={{ minHeight: '260px' }}>
                 {props.listsArr &&
                     props.listsArr.map(el => {
-                        const date = new Date(el.date).toString();
+                        const date = convertDate(el.date);
                         return (
                             <li
                                 className='list-group-item'
@@ -52,12 +52,7 @@ const LoadModal = (props: Props) => (
                                 onClick={props.selectHandler}
                                 data-id={el._id}>
                                 {el.listName}
-                                <span className='date'>
-                                    {date
-                                        .split(' ')
-                                        .slice(1, 5)
-                                        .join(' ')}
-                                </span>
+                                <span className='date'>{date}</span>
                                 <span
                                     className='delete'
                                     data-id={el._id}

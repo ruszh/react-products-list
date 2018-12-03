@@ -8,17 +8,19 @@ import {
     VERIFICATION,
     SIGNUP,
     LOGOUT,
-    ALERT_ERROR
+    ALERT_ERROR,
+    ALERT_SUCCESS
 } from '../../constants';
 import { createAction } from '../../utilities';
 import AuthService from '../../services/AuthService';
 import { push as navigate } from 'connected-react-router';
 
-const signinEpic = action$ =>
+const signinEpic = (action$, state$) =>
     action$.pipe(
         ofType(SIGNIN.request),
-        mergeMap(action =>
-            from(AuthService.signin(action.payload)).pipe(
+        mergeMap(action => {
+            const { email, password } = state$.value.form.login.values;
+            return from(AuthService.signin({ email, password })).pipe(
                 switchMap(response => {
                     if (response.success) {
                         const signinUser = {
@@ -27,7 +29,10 @@ const signinEpic = action$ =>
                             name: response.data.name
                         };
                         localStorage.setItem('token', response.token);
-                        return [createAction(SIGNIN.success)(signinUser), navigate('/dashboard')];
+                        return [
+                            createAction(SIGNIN.success)(signinUser),
+                            navigate('/dashboard')
+                        ];
                     }
                     return [
                         createAction(SIGNIN.error)(response.error),
@@ -37,14 +42,20 @@ const signinEpic = action$ =>
                 catchError(err =>
                     of(createAction(SIGNIN.error)(err.response.error))
                 )
-            )
-        )
+            );
+        })
     );
 
 const alertEpic = action$ =>
     action$.pipe(
         ofType(ALERT_ERROR.request),
         map(() => createAction(ALERT_ERROR.success)()),
+        delay(2000)
+    );
+const alertSuccessEpic = action$ =>
+    action$.pipe(
+        ofType(ALERT_SUCCESS.request),
+        map(() => createAction(ALERT_SUCCESS.success)()),
         delay(2000)
     );
 
@@ -62,13 +73,15 @@ const verifyEpic = (action$, state$) =>
                         ];
                     }
 
-                    const actions = [ createAction(VERIFICATION.success)(response.user) ];
+                    const actions = [
+                        createAction(VERIFICATION.success)(response.user)
+                    ];
                     const location = state$.value.router.location.pathname;
-                    const rootLocation = location === '/'
+                    const rootLocation = location === '/';
 
-                    if(rootLocation) actions.push(navigate('/dashboard'))
+                    if (rootLocation) actions.push(navigate('/dashboard'));
 
-                    return actions
+                    return actions;
                 }),
                 catchError(err => of(createAction(VERIFICATION.error)(err)))
             )
@@ -84,21 +97,37 @@ const logoutEpic = action$ =>
         })
     );
 
-const signupEpic = action$ =>
+const signupEpic = (action$, state$) =>
     action$.pipe(
         ofType(SIGNUP.request),
-        mergeMap(action =>
-            from(AuthService.signup(action.payload)).pipe(
-                map(async result => {
-                    const response = await result;
+        mergeMap(action => {
+            const {
+                email,
+                password,
+                name
+            } = state$.value.form.registration.values;
+            return from(
+                AuthService.signup({
+                    email: email.toLowerCase(),
+                    password,
+                    name
+                })
+            ).pipe(
+                switchMap(response => {
                     if (response.success) {
-                        return createAction(SIGNUP.success)(response.success);
+                        return [
+                            createAction(SIGNUP.success)(response.success),
+                            createAction(ALERT_SUCCESS.request)(response.success)
+                        ];
                     }
-                    return createAction(SIGNUP.error)(response.error);
+                    return [
+                        createAction(SIGNUP.error)(response.error),
+                        createAction(ALERT_ERROR.request)(response.error)
+                    ];
                 }),
                 catchError(err => of(createAction(SIGNUP.error)(err)))
-            )
-        )
+            );
+        })
     );
 
 export const authEpics = combineEpics(
@@ -106,5 +135,6 @@ export const authEpics = combineEpics(
     verifyEpic,
     logoutEpic,
     signupEpic,
-    alertEpic
+    alertEpic,
+    alertSuccessEpic
 );

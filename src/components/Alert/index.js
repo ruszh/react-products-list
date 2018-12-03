@@ -3,16 +3,21 @@ import React from 'react';
 import './Alert.css';
 
 type Props = {
-    type: string,
-    message: string
+    alert: { type: string, message: string }
 };
 
-const Alert = (props: Props) => (
-    <div className='alert-container'>
-        <div className={`alert alert-${props.type}`} role='alert'>
-            {props.message}
+const Alert = (props: Props) => {
+    const { type, message } = props.alert;
+    if (!type && !message) return null;
+    const alertClass: string =
+        type === 'success' ? 'alert-success' : 'alert-danger';
+    return (
+        <div className='alert-container'>
+            <div className={`alert ${alertClass}`} role='alert'>
+                {message}
+            </div>
         </div>
-    </div>
-);
+    );
+};
 
 export default Alert;
