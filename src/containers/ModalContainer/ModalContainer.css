@@ -25,12 +25,17 @@
     color: white;
     margin-right: 15px;
 }
-.saved-list li:hover .delete {
+.saved-list li:hover .edit-container {
     right: 10px;
     opacity: 1;
     transition-duration: .5s;
 }
-.delete {
+/* .saved-list li:hover .delete {
+    right: 10px;
+    opacity: 1;
+    transition-duration: .5s;
+} */
+/* .delete {
     float: right;
     position: absolute;
     top: 10px;
@@ -40,4 +45,4 @@
 }
 .delete img {
     width: 20px;
-}
+} */

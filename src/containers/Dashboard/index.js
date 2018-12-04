@@ -10,6 +10,9 @@ import Header from '../../components/Header';
 import ListContent from '../../components/ListContent';
 import ModalContainer from '../ModalContainer';
 
+import Button from '@material-ui/core/Button';
+import { withStyles } from '@material-ui/core/styles';
+
 import type { ProductItem, ShopItem, Lists, Action } from './types';
 import type { State } from '../../store/types';
 import {
@@ -22,6 +25,18 @@ import {
     LOAD_LIST,
     LOGOUT
 } from '../../constants';
+
+type Styles = {
+    buttons: {
+        marginRight: number
+    }
+};
+
+const styles: Styles = {
+    buttons: {
+        marginRight: 10
+    }
+};
 
 type Props = {|
     isLoading: boolean,
@@ -39,7 +54,8 @@ type Props = {|
     loadListsAction: Action,
     openModalAction: Action,
     logoutAction: Action,
-    push: (path: string) => any
+    push: (path: string) => any,
+    classes: Styles
 |};
 
 class Dashboard extends Component<Props> {
@@ -60,7 +76,7 @@ class Dashboard extends Component<Props> {
         const getFilteredResult = (arr): number[] =>
             arr
                 .filter((el: { selected: boolean }) => el.selected)
-                .map((el) => el.id);
+                .map(el => el.id);
         return {
             shops: getFilteredResult(allItems.shops),
             products: getFilteredResult(allItems.products)
@@ -249,7 +265,7 @@ class Dashboard extends Component<Props> {
     };
 
     render() {
-        const { isLoading, push } = this.props;
+        const { isLoading, push, classes } = this.props;
         return (
             <Fragment>
                 {!isLoading ? (
@@ -277,16 +293,20 @@ class Dashboard extends Component<Props> {
                             />
                         </div>
                         <div className='row'>
-                            <button
-                                className='btn btn-primary'
+                            <Button
+                                className={classes.buttons}
+                                variant='contained'
+                                color='primary'
                                 onClick={() => this.openModalHandler('load')}>
                                 Load
-                            </button>
-                            <button
-                                className='btn btn-success'
+                            </Button>
+                            <Button
+                                className={classes.buttons}
+                                variant='contained'
+                                color='secondary'
                                 onClick={() => this.openModalHandler('save')}>
                                 Save
-                            </button>
+                            </Button>
                         </div>
                     </Fragment>
                 ) : (
@@ -326,4 +346,4 @@ export default connect(
         logoutAction: createAction(LOGOUT.request),
         push
     }
-)(Dashboard);
+)(withStyles(styles)(Dashboard));

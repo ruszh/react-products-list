@@ -1,22 +1,61 @@
 //@flow
 import React from 'react';
 import './Header.css';
+import Button from '@material-ui/core/Button';
+import { withStyles } from '@material-ui/core/styles';
+
+type Styles = {
+    button: {
+        margin: number
+    },
+    userInfoButton: {
+        margin: number,
+        float: string
+    }
+};
+
+const styles = (theme: Object): Styles => ({
+    button: {
+        margin: theme.spacing.unit
+    },
+    userInfoButton: {
+        margin: theme.spacing.unit,
+        float: 'right'
+    }
+});
 
 type Props = {
     logout: Function,
     email: string,
-    route: Function
-}
+    route: Function,
+    classes: Styles
+};
 
-const Header = (props: Props) => (
-    <div className='row header'>
-        <div style={{width: '100%'}}>
-            <button className='btn' onClick={props.logout}>logout</button>
-            <div className='col-form-label user-data'>User: {props.email}</div>
-            <button className='btn float-right' onClick={() => props.route('/user')}>User info</button>
+const Header = (props: Props) => {
+    const { classes } = props;
+    return (
+        <div className='row header'>
+            <div style={{ width: '100%' }}>
+                <Button
+                    variant='outlined'
+                    className={classes.button}
+                    color='primary'
+                    onClick={props.logout}>
+                    logout
+                </Button>
+                <div className='col-form-label user-data'>
+                    User: {props.email}
+                </div>
+                <Button
+                    variant='outlined'
+                    className={classes.userInfoButton}
+                    color='primary'
+                    onClick={() => props.route('/user')}>
+                    User info
+                </Button>
+            </div>
         </div>
-    </div>
-);
+    );
+};
 
-export default Header;
-
+export default withStyles(styles)(Header);

@@ -1,12 +1,34 @@
 //@flow
 import React from 'react';
 import { Field, reduxForm } from 'redux-form';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import { withStyles } from '@material-ui/core/styles';
+
+type Styles = {
+    buttons: {
+        marginRight: number
+    }
+};
 
 type Props = {
     isValid: boolean,
     signupHandler: (values: SyntheticEvent<>) => void,
-    toggleHandler: () => void
-}
+    toggleHandler: () => void,
+    classes: Styles
+};
+
+const renderTextField = ({ input, label, ...custom }): any => (
+    <TextField label={label} {...input} {...custom} />
+);
+
+
+
+const styles: Styles = {
+    buttons: {
+        marginRight: 10
+    }
+};
 
 let RegistrationForm = (props: Props) => (
     <form onSubmit={props.signupHandler}>
@@ -14,13 +36,13 @@ let RegistrationForm = (props: Props) => (
             <div className='form-group row'>
                 <div className='col'>
                     <Field
-                        component='input'
+                        component={renderTextField}
                         type='text'
-                        className={
-                            props.isValid
-                                ? 'form-control'
-                                : 'form-control is-invalid'
-                        }
+                        // className={
+                        //     props.isValid
+                        //         ? 'form-control'
+                        //         : 'form-control is-invalid'
+                        // }
                         name='email'
                         placeholder='Email'
                         required
@@ -31,7 +53,7 @@ let RegistrationForm = (props: Props) => (
             <div className='form-group row'>
                 <div className='col'>
                     <Field
-                        component='input'
+                        component={renderTextField}
                         type='text'
                         className='form-control'
                         name='name'
@@ -43,13 +65,13 @@ let RegistrationForm = (props: Props) => (
             <div className='form-group row'>
                 <div className='col'>
                     <Field
-                        component='input'
+                        component={renderTextField}
                         type='password'
-                        className={
-                            props.isValid
-                                ? 'form-control'
-                                : 'form-control is-invalid'
-                        }
+                        // className={
+                        //     props.isValid
+                        //         ? 'form-control'
+                        //         : 'form-control is-invalid'
+                        // }
                         name='password'
                         placeholder='Password'
                         required
@@ -61,14 +83,20 @@ let RegistrationForm = (props: Props) => (
             </div>
             <div className='form-group row'>
                 <div className='col'>
-                    <button type='submit' className='btn btn-success'>
+                    <Button
+                        className={props.classes.buttons}
+                        color='primary'
+                        variant='contained'
+                        type='submit'>
                         Register
-                    </button>
-                    <button
+                    </Button>
+                    <Button
+                        color='secondary'
+                        variant='contained'
                         onClick={props.toggleHandler}
-                        className='btn btn-danger'>
+                        className={props.classes.buttons}>
                         Back
-                    </button>
+                    </Button>
                 </div>
             </div>
         </div>
@@ -79,4 +107,4 @@ RegistrationForm = reduxForm({
     form: 'registration'
 })(RegistrationForm);
 
-export default RegistrationForm;
+export default withStyles(styles)(RegistrationForm);

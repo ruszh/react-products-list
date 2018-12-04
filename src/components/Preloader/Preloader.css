@@ -1,6 +1,8 @@
 .preloader {
     z-index: 10;
     background-color: white;
+    text-align: center;
+    width: 100%;
 }
 
 .preloader img {

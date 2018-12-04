@@ -4,6 +4,7 @@ import SearchResult from '../../components/SearchResult';
 import debounce from 'lodash/debounce';
 import './Search.css';
 import type { ListItems } from '../../containers/Dashboard/types';
+import Input from '@material-ui/core/Input';
 
 type Props = {
     items: ListItems,
@@ -16,7 +17,7 @@ type State = {
     inputValue: string
 };
 
-export default class Search extends Component<Props, State> {
+class Search extends Component<Props, State> {
     state = {
         showSearchResult: false,
         searchResult: [],
@@ -48,6 +49,11 @@ export default class Search extends Component<Props, State> {
         }
     };
 
+    onChangeHandler = (e: SyntheticInputEvent<>) => {
+        this.setState({ inputValue: e.target.value });
+        this.onSearchHandler(e.target.value);
+    };
+
     onSearchHandler = debounce(
         (value: string) => {
             this.setState({
@@ -61,16 +67,13 @@ export default class Search extends Component<Props, State> {
     );
 
     render() {
+        const classes = this.props;
         return (
-            <div className='search-container'>
-                <input
-                    type='text'
-                    className='form-control search-input'
+            <div>
+                <Input
+                    fullWidth
                     placeholder='Search'
-                    onChange={(e: SyntheticInputEvent<> ) => {
-                        this.setState({ inputValue: e.target.value });
-                        this.onSearchHandler(e.target.value);
-                    }}
+                    onChange={this.onChangeHandler}
                     value={this.state.inputValue}
                     onBlur={this.hideSearchResult}
                 />
@@ -84,3 +87,5 @@ export default class Search extends Component<Props, State> {
         );
     }
 }
+
+export default Search;

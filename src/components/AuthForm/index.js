@@ -19,14 +19,14 @@ class AuthForm extends Component<Props, State> {
         signupMode: false
     };
 
-    signupHandler = (values: SyntheticEvent<>) => {
-        values.preventDefault();
+    signupHandler = (event: SyntheticEvent<>) => {
+        event.preventDefault();
 
         this.props.signup();
     };
 
-    signinHandler = (values: SyntheticEvent<>) => {
-        values.preventDefault();
+    signinHandler = (event: SyntheticEvent<>) => {
+        event.preventDefault();
         this.props.signin();
     };
 

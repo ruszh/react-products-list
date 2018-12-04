@@ -1,11 +1,18 @@
+//@flow
 import React from 'react';
 import { Field, reduxForm } from 'redux-form';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
 
 type Props = {
     isValid: boolean,
     signinHandler: (values: SyntheticEvent<>) => void,
     toggleHandler: () => void
-}
+};
+
+const renderTextField = ({ input, label, ...custom }): any => (
+    <TextField label={label} {...input} {...custom} />
+);
 
 let LoginForm = (props: Props) => (
     <form onSubmit={props.signinHandler}>
@@ -13,7 +20,7 @@ let LoginForm = (props: Props) => (
             <div className='form-group row'>
                 <div className='col'>
                     <Field
-                        component='input'
+                        component={renderTextField}
                         type='text'
                         className={
                             props.isValid
@@ -30,7 +37,7 @@ let LoginForm = (props: Props) => (
             <div className='form-group row'>
                 <div className='col'>
                     <Field
-                        component='input'
+                        component={renderTextField}
                         type='password'
                         className={
                             props.isValid
@@ -48,20 +55,18 @@ let LoginForm = (props: Props) => (
             </div>
             <div className='form-group row'>
                 <div className='col'>
-                    <button type='submit' className='btn btn-primary'>
+                    <Button color='primary' variant='contained' type='submit'>
                         Login
-                    </button>
+                    </Button>
                 </div>
             </div>
             <div className='form-group row'>
                 <div className='col-form-label' style={{ marginLeft: '15px' }}>
                     You are not register?
                 </div>
-                <button
-                    onClick={props.toggleHandler}
-                    className='btn btn-link'>
+                <Button color='secondary' onClick={props.toggleHandler}>
                     Signup
-                </button>
+                </Button>
             </div>
         </div>
     </form>
