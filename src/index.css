@@ -21,6 +21,10 @@ h2 {
   text-align: center;
 }
 
+button:active, button:focus, input:active, input:focus {
+  outline: none;
+}
+
 .content-center {
   position: fixed;
   top: 0px;

@@ -2,14 +2,43 @@
 import React, { Component, Fragment } from 'react';
 import './Pagination.css';
 import { generateSequence } from '../../utilities';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import { withStyles } from '@material-ui/core/styles';
+import ArrowBackIos from '@material-ui/icons/ArrowBackIos';
+import ArrowForwardIos from '@material-ui/icons/ArrowForwardIos';
+
+type Styles = {
+    list: {
+        dispaly: string,
+        justifyContent: string
+    },
+    text: {
+        dispaly: string,
+        justifyContent: string
+    }
+}
 
 type Props = {
     current: number,
     pages: number,
-    selectPageHandler: (page: number, sort?: string) => void
+    selectPageHandler: (page: number, sort?: string) => void,
+    classes: Styles
 };
 
-export default class Pagination extends Component<Props> {
+const styles: Styles = {
+    list: {
+        dispaly: 'flex',
+        justifyContent: 'center'
+    },
+    text: {
+        dispaly: 'flex',
+        justifyContent: 'center'
+    }
+}
+
+class Pagination extends Component<Props> {
     selectPage = (e: Object) => {
         const value = Number(e.target.dataset.page);
         if (value === this.props.current) return;
@@ -44,47 +73,60 @@ export default class Pagination extends Component<Props> {
     }
 
     render() {
-        const { current, pages } = this.props;
+        const { current, pages, classes } = this.props;
         return (
             <Fragment>
-                <ul className='pagination'>
+                <List className='pagination'>
                     {pages > 1 && (
-                        <li
+                        <ListItem
+                            button
                             style={{ width: '64px' }}
-                            className={current > 1 ? '' : 'disabled'}
+                            disabled={current > 1 ? false : true}
                             onClick={this.prevPage}>
-                            prev
-                        </li>
+                            <ArrowBackIos />
+                        </ListItem>
                     )}
                     {current > 3 && pages > 6 && (
-                        <li onClick={this.selectPage} data-page='1'>
-                            ...
-                        </li>
+                        <ListItem
+                            button
+                            onClick={this.selectPage}
+                            data-page='1'>
+                            <ListItemText>...</ListItemText>
+                        </ListItem>
                     )}
                     {this.pages.map(el => (
-                        <li
+                        <ListItem
+                            className={classes.text}
+                            button
                             key={el}
-                            className={el === current ? 'active' : ''}
+                            selected={el === current ? true : false}
                             data-page={el}
                             onClick={this.selectPage}>
                             {el}
-                        </li>
+                        </ListItem>
                     ))}
                     {current < pages - 2 && pages > 6 && (
-                        <li onClick={this.selectPage} data-page={pages}>
-                            ...
-                        </li>
+                        <ListItem
+                            button
+                            onClick={this.selectPage}
+                            data-page={pages}>
+                            <ListItemText>...</ListItemText>
+                        </ListItem>
                     )}
                     {pages > 1 && (
-                        <li
+                        <ListItem
+                            button
                             onClick={this.nextPage}
-                            className={current !== pages ? '' : 'disabled'}
+                            disabled={current !== pages ? false : true}
                             style={{ width: '64px' }}>
-                            next
-                        </li>
+                            <ArrowForwardIos />
+                        </ListItem>
                     )}
-                </ul>
+                </List>
             </Fragment>
         );
     }
 }
+
+
+export default withStyles(styles)(Pagination);

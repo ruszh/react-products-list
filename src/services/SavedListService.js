@@ -68,6 +68,18 @@ class SavedListService {
 
         return new Error('Something go wrong');
     }
+    async renameList(list: { listId: string, listName: string}) {
+        const options = {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(list)
+        };
+        const result = await fetch(`${CONFIG.url}list/update`, options);
+
+        return result.json();
+    }
 }
 
 export default new SavedListService();

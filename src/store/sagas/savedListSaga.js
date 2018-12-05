@@ -6,6 +6,7 @@ import {
     GET_LIST,
     DELETE_LIST,
     ALERT_ERROR,
+    RENAME_LIST,
     ALERT_SUCCESS
 } from '../../constants';
 import { createAction } from '../../utilities';
@@ -94,9 +95,21 @@ function* deleteList(action) {
     }
 }
 
+function* renameList(action) {
+    try {
+        const result = yield call(SavedListService.renameList, action.payload);
+        yield put(createAction(RENAME_LIST.success)());
+        yield put(createAction(ALERT_SUCCESS.request)(result.success))
+        return yield put(createAction(LOAD_LIST.request)());
+    } catch (err) {
+        yield put(createAction(RENAME_LIST.error)(err));
+    }
+}
+
 export function* watchSavedList() {
     yield takeEvery(LOAD_LIST.request, loadLists);
     yield takeEvery(SAVE_LIST.request, saveList);
     yield takeEvery(GET_LIST.request, getList);
     yield takeEvery(DELETE_LIST.request, deleteList);
+    yield takeEvery(RENAME_LIST.request, renameList);
 }

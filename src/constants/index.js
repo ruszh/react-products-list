@@ -14,6 +14,7 @@ export const LOAD_LIST = createConstant('LOAD_LIST');
 export const SAVE_LIST = createConstant('SAVE_LIST');
 export const GET_LIST = createConstant('GET_LIST');
 export const DELETE_LIST = createConstant('DELETE_LIST');
+export const RENAME_LIST = createConstant('RENAME_LIST');
 
 //---------------Data constants--------------------
 

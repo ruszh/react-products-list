@@ -3,6 +3,8 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 
+import './Dashboard.css';
+
 import { sortByName, sortByCheck, createAction } from '../../utilities';
 
 import Preloader from '../../components/Preloader';
@@ -25,6 +27,7 @@ import {
     LOAD_LIST,
     LOGOUT
 } from '../../constants';
+
 
 type Styles = {
     buttons: {
@@ -292,7 +295,7 @@ class Dashboard extends Component<Props> {
                                 checkHandler={this.checkProductsHandler}
                             />
                         </div>
-                        <div className='row'>
+                        <div className='row footer'>
                             <Button
                                 className={classes.buttons}
                                 variant='contained'
