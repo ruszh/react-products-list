@@ -67,7 +67,6 @@ class Search extends Component<Props, State> {
     );
 
     render() {
-        const classes = this.props;
         return (
             <div>
                 <Input

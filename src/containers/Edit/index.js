@@ -5,7 +5,7 @@ import RenameDialog from './RenameDialog';
 
 import { connect } from 'react-redux';
 import { createAction } from '../../utilities';
-import { DELETE_LIST } from '../../constants'
+import { DELETE_LIST, RENAME_LIST, ALERT_ERROR } from '../../constants';
 
 import type { State } from '../../store/types';
 
@@ -18,6 +18,11 @@ import Menu from '@material-ui/core/Menu';
 type Styles = {
     dropdown: {
         zIndex: number
+    },
+    button: {
+        '&:hover': {
+            background: string
+        }
     }
 };
 
@@ -25,8 +30,11 @@ type Props = {
     id: string,
     classes: Styles,
     listName: string,
-    deleteListAction: (id: string) => Object
+    deleteListAction: (id: string) => Object,
+    renameListAction: ({ listId: string, listName: string }) => Object,
+    alertErrorAction: (message: string) => Object
 };
+
 type EditState = {
     anchorEl?: any,
     openDeleteDialog: boolean,
@@ -36,68 +44,61 @@ type EditState = {
 const styles: Styles = {
     dropdown: {
         zIndex: 10001
+    },
+    button: {
+        opacity: 0,
+        '&:hover': {
+            background: 'none',
+            opacity: 1
+        }
     }
 };
 
 class Edit extends Component<Props, EditState> {
-    // state = {
-    //     isOpen: false
-    // };
-    // toggleDropdown = () => {
-    //     this.setState({
-    //         isOpen: !this.state.isOpen
-    //     });
-    // };
-    // render() {
-    //     const { isOpen } = this.state;
-    //     return (
-    //         <div className='edit-container'>
-    //             <Icon onClick={this.toggleDropdown} addedClass={isOpen? 'active' : ''}/>
-    //             {/* <Dropdown /> */}
-    //         </div>
-    //     );
-    // }
     state = {
         anchorEl: null,
         openDeleteDialog: false,
         openRenameDialog: false
     };
 
-    handleClick = e => {
+    handleClick = (e: SyntheticEvent<any>) => {
         e.stopPropagation();
         this.setState({ anchorEl: e.currentTarget });
     };
 
-    handleDelete = (e) => {
+    handleDelete = (e: SyntheticEvent<any>) => {
         e.stopPropagation();
-
-        this.props.deleteListAction(this.props.id)
+        this.props.deleteListAction(this.props.id);
+        this.setState({ anchorEl: null });
     };
 
-    handleRename = (value) => {
-        console.log(`new name ${value}`)
-    }
+    handleRename = (value: string) => {
+        const { renameListAction, id, listName, alertErrorAction } = this.props;
+        if(listName === value) {
+            return alertErrorAction('Name is not changed');
+        }
+        if(!value) {
+            return alertErrorAction('Name field is empty');
+        }
+        renameListAction({ listId: id, listName: value });
+        this.setState({ openRenameDialog: false, anchorEl: null });
+    };
 
-    // handleRename = e => {
-    //     e.stopPropagation();
-    //     console.log('rename', this.props.id);
-    // };
-
-    handleClose = e => {
+    handleClose = (e: SyntheticEvent<any>) => {
         e.stopPropagation();
         this.setState({ anchorEl: null });
     };
 
-    toggleDeleteDialog = (e) => {
+    toggleDeleteDialog = (e: SyntheticEvent<any>) => {
         e.stopPropagation();
         this.setState({ openDeleteDialog: !this.state.openDeleteDialog });
     };
-    toggleRenameDialog = (e) => {
+    toggleRenameDialog = (e: SyntheticEvent<any>) => {
         e.stopPropagation();
         this.setState({
             openRenameDialog: !this.state.openRenameDialog
-        })
-    }
+        });
+    };
 
     render() {
         const { anchorEl, openDeleteDialog, openRenameDialog } = this.state;
@@ -115,14 +116,18 @@ class Edit extends Component<Props, EditState> {
                     open={openRenameDialog}
                     rename={this.handleRename}
                     handleClose={this.toggleRenameDialog}
-                    />
+                />
                 <Button
+                    size='small'
+                    className={classes.button}
+                    disableRipple={true}
                     aria-owns={anchorEl ? `simple-menu-${id}` : undefined}
                     aria-haspopup='true'
                     onClick={this.handleClick}>
                     <Settings />
                 </Button>
                 <Menu
+                    onBackdropClick={e => e.stopPropagation()}
                     className={classes.dropdown}
                     id={`simple-menu-${id}`}
                     anchorEl={anchorEl}
@@ -140,14 +145,13 @@ class Edit extends Component<Props, EditState> {
     }
 }
 
-const mapStateToProps = (state: State) => ({
-
-})
+const mapStateToProps = (state: State): Object => ({});
 
 export default connect(
     mapStateToProps,
     {
-        deleteListAction: createAction(DELETE_LIST.request)
+        deleteListAction: createAction(DELETE_LIST.request),
+        renameListAction: createAction(RENAME_LIST.request),
+        alertErrorAction: createAction(ALERT_ERROR.request)
     }
-
 )(withStyles(styles)(Edit));

@@ -5,7 +5,9 @@ import { savedListReducer } from './savedList';
 import { modalReducer } from './modal';
 import { alertReducer } from './alert';
 import { connectRouter } from 'connected-react-router';
-import { reducer as formReducer } from 'redux-form'
+import { exportReducer } from './exportList';
+
+import { reducer as formReducer } from 'redux-form';
 
 export const rootReducer = history => combineReducers({
     router: connectRouter(history),
@@ -14,5 +16,6 @@ export const rootReducer = history => combineReducers({
     savedList: savedListReducer,
     modal: modalReducer,
     form: formReducer,
-    alert: alertReducer
+    alert: alertReducer,
+    export: exportReducer
 })

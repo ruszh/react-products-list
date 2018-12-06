@@ -2,7 +2,6 @@
 import React, { Fragment } from 'react';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import InputLabel from '@material-ui/core/InputLabel';
 import Input from '@material-ui/core/Input';
 
@@ -13,10 +12,7 @@ type Props = {
 
 const SortSelect = (props: Props) => (
     <Fragment>
-        {/* <label className='col-form-label col-3' htmlFor='sort'>
-            Sort by:
-        </label> */}
-        <FormControl>
+        <FormControl style={{ marginLeft: '35px' }}>
             <InputLabel htmlFor='sort'>Sort by:</InputLabel>
             <Select
                 input={<Input id='sort' />}

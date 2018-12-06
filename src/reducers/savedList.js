@@ -1,5 +1,5 @@
 //@flow
-import { LOAD_LIST, SAVE_LIST, DELETE_LIST } from '../constants';
+import { LOAD_LIST, SAVE_LIST, DELETE_LIST, RENAME_LIST } from '../constants';
 import type { Lists } from '../containers/Dashboard/types';
 
 type State = {
@@ -25,12 +25,12 @@ type Payload = {
     pages: number,
     lists: Lists,
     sort: string
-}
+};
 
 type Action = {
     type: string,
     payload: Payload
-}
+};
 
 export function savedListReducer(state: State = initState, action: Action) {
     switch (action.type) {
@@ -69,6 +69,19 @@ export function savedListReducer(state: State = initState, action: Action) {
                 error: action.payload,
                 success: ''
             };
+        case RENAME_LIST.success:
+            return {
+                ...state,
+                error: '',
+                success: action.payload
+            };
+        case RENAME_LIST.error:
+            return {
+                ...state,
+                success: '',
+                error: action.payload
+            };
+
         default:
             return state;
     }

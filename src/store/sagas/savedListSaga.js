@@ -89,6 +89,7 @@ function* deleteList(action) {
     try {
         const result = yield call(SavedListService.deleteList, action.payload);
         yield put(createAction(DELETE_LIST.success)(result.success));
+        yield put(createAction(ALERT_SUCCESS.request)(result.success));
         return yield put(createAction(LOAD_LIST.request)());
     } catch (err) {
         yield put(createAction(DELETE_LIST.error)(err));
@@ -98,11 +99,16 @@ function* deleteList(action) {
 function* renameList(action) {
     try {
         const result = yield call(SavedListService.renameList, action.payload);
-        yield put(createAction(RENAME_LIST.success)());
-        yield put(createAction(ALERT_SUCCESS.request)(result.success))
-        return yield put(createAction(LOAD_LIST.request)());
+        if(result.success) {
+            yield put(createAction(RENAME_LIST.success)());
+            yield put(createAction(ALERT_SUCCESS.request)(result.success))
+            return yield put(createAction(LOAD_LIST.request)());
+        }
+        yield put(createAction(RENAME_LIST.error)(result.error));
+        yield put(createAction(ALERT_ERROR.request)(result.error))
     } catch (err) {
         yield put(createAction(RENAME_LIST.error)(err));
+
     }
 }
 

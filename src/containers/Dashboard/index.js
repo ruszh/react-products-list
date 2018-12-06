@@ -11,6 +11,7 @@ import Preloader from '../../components/Preloader';
 import Header from '../../components/Header';
 import ListContent from '../../components/ListContent';
 import ModalContainer from '../ModalContainer';
+import ExportList from '../../components/ExportList';
 
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
@@ -310,6 +311,7 @@ class Dashboard extends Component<Props> {
                                 onClick={() => this.openModalHandler('save')}>
                                 Save
                             </Button>
+                            <ExportList selectedProducts={this.selectedItems.products} />
                         </div>
                     </Fragment>
                 ) : (

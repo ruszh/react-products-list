@@ -14,7 +14,6 @@ type Styles = {
     }
 };
 
-
 type Props = {
     open: boolean,
     listName: string,
@@ -28,8 +27,7 @@ type State = {
 
 const styles: Styles = {
     root: {
-        zIndex: 10002,
-        pointerEvents: 'none'
+        zIndex: 10002
     }
 };
 
@@ -43,31 +41,27 @@ class RenameDialog extends React.Component<Props, State> {
         this.setState({ value: listName });
     }
 
-    onRenameHandler = (e) => {
-        e.stopPropagation();
-
+    onRenameHandler = (e: SyntheticEvent<any>) => {
         const { value } = this.state;
-        this.props.rename(value)
+        // if (!value) return;
+        // if (value === this.props.listName) {
+        //     return console.log('The name is not changed');
+        // }
+        this.props.rename(value);
     };
 
-    onChangeHandler = (e: SyntheticEvent<>) => {
-        const value = e.currentTarget.value;
+    onChangeHandler = (e: SyntheticEvent<any>) => {
+        const value: string  = e.currentTarget.value;
         this.setState({ value });
     };
 
-    //   handleClickOpen = () => {
-    //     this.setState({ open: true });
-    //   };
-
-    //   handleClose = () => {
-    //     this.setState({ open: false });
-    //   };
-
     render() {
-        const { open, handleClose, classes, rename } = this.props;
+        const { open, handleClose, classes } = this.props;
         return (
             <div>
                 <Dialog
+                    onBackdropClick={e => e.stopPropagation()}
+                    onClick={e => e.stopPropagation()}
                     className={classes.root}
                     open={open}
                     onClose={handleClose}
@@ -78,13 +72,13 @@ class RenameDialog extends React.Component<Props, State> {
                     <DialogContent>
                         <TextField
                             autoFocus
-                            margin='dense'
                             id='name'
-                            label='Email Address'
-                            type='email'
+                            label='List name'
+                            type='text'
                             onChange={this.onChangeHandler}
                             value={this.state.value}
                             fullWidth
+                            required
                         />
                     </DialogContent>
                     <DialogActions>

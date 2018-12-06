@@ -26,6 +26,9 @@ type Props = {
 const styles: Styles = {
     root: {
         zIndex: 10002
+    },
+    content: {
+        pointerEvents: 'none'
     }
 };
 
@@ -41,6 +44,8 @@ class DeleteDialog extends React.Component<Props> {
         return (
             <div>
                 <Dialog
+                    onBackdropClick={(e) => e.stopPropagation()}
+                    onClick={(e) => e.stopPropagation()}
                     open={open}
                     className={classes.root}
                     onClose={handleClose}

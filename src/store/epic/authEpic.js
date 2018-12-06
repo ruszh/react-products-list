@@ -40,7 +40,7 @@ const signinEpic = (action$, state$) =>
                     ];
                 }),
                 catchError(err =>
-                    of(createAction(SIGNIN.error)(err.response.error))
+                    of(createAction(SIGNIN.error)(err))
                 )
             );
         })

@@ -1,9 +1,4 @@
-.modal-container {
-    padding: 10px 20px;
-}
-.modal-body {
-    min-width: 500px;
-}
+
 .date {
     float: right;
     font-size: 1em;
@@ -12,24 +7,16 @@
     pointer-events: none;
     transition-duration: .5s;
 }
-.saved-list li {
-    cursor: pointer;
+
+.list-container {
+    min-height: 315px;
 }
 
-.saved-list li:hover {
-    background-color: #007bff;
-    color: white;
-}
-
-.saved-list li:hover .date {
-    color: white;
-    margin-right: 15px;
-}
-.saved-list li:hover .edit-container {
+/* .saved-list li:hover .edit-container {
     right: 10px;
     opacity: 1;
     transition-duration: .5s;
-}
+} */
 /* .saved-list li:hover .delete {
     right: 10px;
     opacity: 1;
@@ -45,4 +32,29 @@
 }
 .delete img {
     width: 20px;
+} */
+
+/* .listItem {
+    position: relative;
+}
+
+.edit {
+    position: absolute;
+    top: 0;
+    right: -10px;
+    opacity: 0;
+    transition-duration: .5s;
+}
+.listItem:hover .date {
+    margin-right: 15px;
+
+}
+.listItem:hover .edit {
+    opacity: 1;
+    transition-duration: .5s;
+    right: 10;
+}
+
+.edit:hover {
+    background: none;
 } */

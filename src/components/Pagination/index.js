@@ -33,6 +33,7 @@ const styles: Styles = {
         justifyContent: 'center'
     },
     text: {
+        width: 25,
         dispaly: 'flex',
         justifyContent: 'center'
     }
@@ -40,7 +41,7 @@ const styles: Styles = {
 
 class Pagination extends Component<Props> {
     selectPage = (e: Object) => {
-        const value = Number(e.target.dataset.page);
+        const value = Number(e.currentTarget.dataset.page);
         if (value === this.props.current) return;
         this.props.selectPageHandler(value);
     };
@@ -80,7 +81,7 @@ class Pagination extends Component<Props> {
                     {pages > 1 && (
                         <ListItem
                             button
-                            style={{ width: '64px' }}
+                            className={classes.text}
                             disabled={current > 1 ? false : true}
                             onClick={this.prevPage}>
                             <ArrowBackIos />
@@ -89,6 +90,7 @@ class Pagination extends Component<Props> {
                     {current > 3 && pages > 6 && (
                         <ListItem
                             button
+                            className={classes.text}
                             onClick={this.selectPage}
                             data-page='1'>
                             <ListItemText>...</ListItemText>
@@ -108,6 +110,7 @@ class Pagination extends Component<Props> {
                     {current < pages - 2 && pages > 6 && (
                         <ListItem
                             button
+                            className={classes.text}
                             onClick={this.selectPage}
                             data-page={pages}>
                             <ListItemText>...</ListItemText>
@@ -116,6 +119,7 @@ class Pagination extends Component<Props> {
                     {pages > 1 && (
                         <ListItem
                             button
+                            className={classes.text}
                             onClick={this.nextPage}
                             disabled={current !== pages ? false : true}
                             style={{ width: '64px' }}>
