@@ -38,7 +38,7 @@ const Lists = (props: Props) => (
                 <Checkbox
                     className='checkbox'
                     checked={el.selected}
-                    value={el.id}
+                    value={el.id + ''}
                     onChange={props.selectHandler}
                 />
                 <ListItemText primary={el.name} />

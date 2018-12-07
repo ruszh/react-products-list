@@ -29,8 +29,7 @@ function* loadLists(action) {
     try {
         const result = yield call(SavedListService.loadLists, option);
         if (result.error) {
-            yield put(createAction(LOAD_LIST.error)(result.error));
-            return;
+            return yield put(createAction(LOAD_LIST.error)(result.error));
         }
         yield put(createAction(LOAD_LIST.success)(result));
     } catch (err) {

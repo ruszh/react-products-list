@@ -29,3 +29,13 @@ export const createAction = (type: string) => (payload: any): Action => ({
     type,
     payload
 });
+
+export const selectShops = (prodId: number, shops: ShopItem[]) => {
+    const result = shops.reduce((acc, shop) => {
+        if (shop.productsids.includes(prodId)) {
+            acc.push(shop.name);
+        }
+        return acc;
+    }, []);
+    return result.join(', ');
+};

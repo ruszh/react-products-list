@@ -11,7 +11,7 @@ import Preloader from '../../components/Preloader';
 import Header from '../../components/Header';
 import ListContent from '../../components/ListContent';
 import ModalContainer from '../ModalContainer';
-import ExportList from '../../components/ExportList';
+import ExportList from '../ExportList';
 
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
@@ -28,7 +28,6 @@ import {
     LOAD_LIST,
     LOGOUT
 } from '../../constants';
-
 
 type Styles = {
     buttons: {
@@ -311,7 +310,12 @@ class Dashboard extends Component<Props> {
                                 onClick={() => this.openModalHandler('save')}>
                                 Save
                             </Button>
-                            <ExportList selectedProducts={this.selectedItems.products} />
+                            <ExportList
+                                selectedProductsIds={
+                                    this.selectedItems.products
+                                }
+                                lists={this.props.lists}
+                            />
                         </div>
                     </Fragment>
                 ) : (
