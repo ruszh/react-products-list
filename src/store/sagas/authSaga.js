@@ -13,15 +13,6 @@ import {
 import { createAction } from '../../utilities';
 import AuthService from '../../services/AuthService';
 
-// import type { Action } from '../../utilities/types';
-// type Result = {
-//     success: string,
-//     data: { _id: string, email: string, name: string },
-//     user: Object,
-//     error: any,
-//     token: string
-// };
-
 function* signin(action) {
     try {
         const response = yield call(AuthService.signin, action.payload);

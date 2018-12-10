@@ -1,6 +1,5 @@
 //@flow
 import React, { Component, Fragment } from 'react';
-import { CSVLink } from 'react-csv';
 import Button from '@material-ui/core/Button';
 import { connect } from 'react-redux';
 import { createAction, selectShops } from '../../utilities';
@@ -40,36 +39,22 @@ class ExportList extends Component<Props> {
         const {
             selectedProductsIds
         } = this.props;
-        const renderDownloadElement = () => (
-            <CSVLink
-                asyncOnClick={true}
-                style={{textDecoration: 'none'}}
-                filename={'products.csv'}
-                data={this.convertData()}>
-                Export to csv
-            </CSVLink>
-        );
-
         return (
             <Fragment>
                 <Button
                     disabled={!selectedProductsIds.length}
-                    variant='outlined'
-                    color='primary'>
-                   { renderDownloadElement() }
-                </Button>
-                <Button
-                    disabled={!selectedProductsIds.length}
                     onClick={this.exportHandler}
                     color='primary'>
-                   export to csv (native)
+                   export to csv
                 </Button>
             </Fragment>
         );
     }
 }
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => ({
+    lists: state.data.lists
+});
 
 export default connect(
     mapStateToProps,

@@ -9,7 +9,8 @@ import {
     SIGNUP,
     LOGOUT,
     ALERT_ERROR,
-    ALERT_SUCCESS
+    ALERT_SUCCESS,
+    GET_LIST
 } from '../../constants';
 import { createAction } from '../../utilities';
 import AuthService from '../../services/AuthService';
@@ -74,7 +75,8 @@ const verifyEpic = (action$, state$) =>
                     }
 
                     const actions = [
-                        createAction(VERIFICATION.success)(response.user)
+                        createAction(VERIFICATION.success)(response.user),
+                        createAction(GET_LIST.request)()
                     ];
                     const location = state$.value.router.location.pathname;
                     const rootLocation = location === '/';

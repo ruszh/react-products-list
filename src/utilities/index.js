@@ -3,8 +3,10 @@ import type { Action, Constant } from './types';
 import type { ProductItem, ShopItem } from '../containers/Dashboard/types';
 
 type Item = ProductItem | ShopItem;
+
 export const sortByCheck = (a: Item, b: Item): number =>
     a.selected === b.selected ? 0 : b.selected ? 1 : -1;
+
 export const sortByName = (a: Item, b: Item): number =>
     a.name > b.name ? 1 : -1;
 
@@ -13,12 +15,14 @@ export function* generateSequence(end: number): any {
         yield i;
     }
 }
+
 export const convertDate = (date: number): string =>
     new Date(date)
         .toString()
         .split(' ')
         .slice(1, 5)
         .join(' ');
+
 export const createConstant = (name: string): Constant => ({
     request: `${name}_REQUEST`,
     success: `${name}_SUCCESS`,
@@ -31,7 +35,7 @@ export const createAction = (type: string) => (payload: any): Action => ({
 });
 
 export const selectShops = (prodId: number, shops: ShopItem[]) => {
-    const result = shops.reduce((acc, shop) => {
+    const result: string[] = shops.reduce((acc, shop) => {
         if (shop.productsids.includes(prodId)) {
             acc.push(shop.name);
         }

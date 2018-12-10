@@ -21,7 +21,8 @@ type Props = {
     history: Object,
     verifyAction: () => void,
     push: () => void,
-    alert: { type: string, message: string }
+    alert: { type: string, message: string },
+    location: Object
 };
 
 class App extends Component<Props> {

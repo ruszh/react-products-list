@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import Modal from 'react-awesome-modal';
 import SaveModal from './SaveModal';
 import LoadModal from './LoadModal';
+import { push } from 'connected-react-router';
 
 import './ModalContainer.css';
 
@@ -32,7 +33,8 @@ type Props = {
     getListAction: Action,
     loadListsAction: Action,
     deleteListAction: Action,
-    selectedItems: { shops: number[], products: number[] }
+    selectedItems: { shops: number[], products: number[] },
+    push: (path: string) => any
 };
 
 class ModalContainer extends Component<Props> {
@@ -74,8 +76,9 @@ class ModalContainer extends Component<Props> {
     };
 
     selectHandler = (e: SyntheticEvent<HTMLElement>) => {
-        this.props.getListAction(e.currentTarget.dataset.id);
+        this.props.push(`/dashboard?list=${e.currentTarget.dataset.id}`)
         this.props.closeModalAction();
+        this.props.getListAction();
     };
     deleteHandler = (e: SyntheticEvent<HTMLElement>) => {
         e.stopPropagation();
@@ -149,6 +152,7 @@ export default connect(
         saveListAction: createAction(SAVE_LIST.request),
         getListAction: createAction(GET_LIST.request),
         loadListsAction: createAction(LOAD_LIST.request),
-        deleteListAction: createAction(DELETE_LIST.request)
+        deleteListAction: createAction(DELETE_LIST.request),
+        push
     }
 )(ModalContainer);

@@ -51,12 +51,17 @@ function* saveList(action) {
     }
 }
 
-function* getList(action) {
+function* getList() {
     try {
-        const result = yield call(SavedListService.getList, action.payload);
+        const search = yield select(state => state.router.location.search);
+        if(!search) return;
+
+        const params = new URLSearchParams(search);
+        const listId = params.get('list');
+
+        const result = yield call(SavedListService.getList, listId);
         if (result.error) {
-            yield put(createAction(GET_LIST.error)(result.error));
-            return;
+            return yield put(createAction(GET_LIST.error)(result.error));
         }
 
         const store = yield select();
@@ -107,7 +112,6 @@ function* renameList(action) {
         yield put(createAction(ALERT_ERROR.request)(result.error))
     } catch (err) {
         yield put(createAction(RENAME_LIST.error)(err));
-
     }
 }
 

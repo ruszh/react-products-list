@@ -269,6 +269,7 @@ class Dashboard extends Component<Props> {
 
     render() {
         const { isLoading, push, classes } = this.props;
+        const { shops, products } = this.selectedItems;
         return (
             <Fragment>
                 {!isLoading ? (
@@ -305,6 +306,7 @@ class Dashboard extends Component<Props> {
                             </Button>
                             <Button
                                 className={classes.buttons}
+                                disabled={!shops.length && !products.length}
                                 variant='contained'
                                 color='secondary'
                                 onClick={() => this.openModalHandler('save')}>
@@ -314,7 +316,6 @@ class Dashboard extends Component<Props> {
                                 selectedProductsIds={
                                     this.selectedItems.products
                                 }
-                                lists={this.props.lists}
                             />
                         </div>
                     </Fragment>
